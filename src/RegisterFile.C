@@ -48,7 +48,14 @@ RegisterFile * RegisterFile::getInstance()
 */
 uint64_t RegisterFile::readRegister(int32_t regNumber, bool & error)
 {
-   return 0;
+	if (regNumber >= 0 && regNumber < REGSIZE){
+		error = false;
+		return reg[regNumber];
+	}
+	else {
+		error = true;
+		return 0;
+	}
 }
 
 /**
@@ -63,7 +70,14 @@ uint64_t RegisterFile::readRegister(int32_t regNumber, bool & error)
 void RegisterFile::writeRegister(uint64_t value, int32_t regNumber, 
                                  bool & error)
 {
-   return;
+        if (regNumber >= 0 && regNumber < REGSIZE){
+                error = false;
+                error = false;
+                reg[regNumber] = value;
+        }
+        else {
+                error = true;
+        }
 }
 
 /**
