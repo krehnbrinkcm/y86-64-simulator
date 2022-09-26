@@ -13,7 +13,7 @@ ConditionCodes * ConditionCodes::ccInstance = NULL;
  */
 ConditionCodes::ConditionCodes()
 {
-
+	codes = 0;
 }
 
 /**
@@ -26,7 +26,10 @@ ConditionCodes::ConditionCodes()
  */
 ConditionCodes * ConditionCodes::getInstance()
 {
-   return NULL;
+	if(ccInstance == NULL) {
+	    ccInstance = new ConditionCodes();
+	}
+	return ccInstance;
 }
 
 /*
@@ -42,9 +45,15 @@ ConditionCodes * ConditionCodes::getInstance()
  */
 bool ConditionCodes::getConditionCode(int32_t ccNum, bool & error)
 {
-   //Use your getBits in Tools.C.
-   //Don't use "magic" numbers.
-   return false;
+
+	if (ccNum >= 0 && ccNum < 64) {
+		error = false;
+		return getBits(codes, ccNum, ccNum);
+	}
+	else {
+		error = true;
+		return false;
+  	}
 }
 
 /*
@@ -62,9 +71,19 @@ bool ConditionCodes::getConditionCode(int32_t ccNum, bool & error)
 void ConditionCodes::setConditionCode(bool value, int32_t ccNum, 
                                       bool & error)
 {
+	if ((ccNum >= 0 && ccNum < 64) && value == 1) { 
+		error = false;
+		setBits(codes, ccNum, ccNum);
+	}
+	else if ((ccNum >= 0 && ccNum < 64) && value == 0) {
+		error = false;
+                clearBits(codes, ccNum, ccNum);
+        }
+	else {
+		error = true;
    //Use your setBits and clearBits in Tools.C. 
    //Don't use "magic" numbers in your code.
-   return;
+   	}
 }
 
 /*

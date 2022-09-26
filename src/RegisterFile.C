@@ -72,7 +72,6 @@ void RegisterFile::writeRegister(uint64_t value, int32_t regNumber,
 {
         if (regNumber >= 0 && regNumber < REGSIZE){
                 error = false;
-                error = false;
                 reg[regNumber] = value;
         }
         else {
