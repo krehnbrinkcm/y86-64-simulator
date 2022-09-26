@@ -28,7 +28,10 @@ RegisterFile::RegisterFile()
  */
 RegisterFile * RegisterFile::getInstance()
 {
-   return NULL;
+   	if(regInstance == NULL) {
+     		regInstance = new RegisterFile();
+   	}
+   	return regInstance;
 }
 
 /**
