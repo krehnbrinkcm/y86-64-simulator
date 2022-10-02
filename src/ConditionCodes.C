@@ -46,7 +46,7 @@ ConditionCodes * ConditionCodes::getInstance()
 bool ConditionCodes::getConditionCode(int32_t ccNum, bool & error)
 {
 
-	if (ccNum >= 0 && ccNum < 64) {
+	if (ccNum == OF || ccNum == SF || ccNum == ZF ) {
 		error = false;
 		return Tools::getBits(codes, ccNum, ccNum);
 	}
@@ -71,20 +71,23 @@ bool ConditionCodes::getConditionCode(int32_t ccNum, bool & error)
 void ConditionCodes::setConditionCode(bool value, int32_t ccNum, 
                                       bool & error)
 {
-	if ((ccNum >= 0 && ccNum < 64) && value == 1) { 
+	if ((ccNum == OF || ccNum == SF || ccNum == ZF ) && value == 1) { 
 		error = false;
 		codes = Tools::setBits(codes, ccNum, ccNum);
 	}
-	else if ((ccNum >= 0 && ccNum < 64) && value == 0) {
+	else if ((ccNum == OF || ccNum == SF || ccNum == ZF ) && value == 0) {
 		error = false;
                 codes = Tools::clearBits(codes, ccNum, ccNum);
        }
+	else if (ccNum != OF || ccNum != SF || ccNum != ZF ) {
+		error = true;
+	}
 	else {
 		error = true;
    //Use your setBits and clearBits in Tools.C. 
    //Don't use "magic" numbers in your code.
    	}
-}
+}	
 
 /*
  * dump
