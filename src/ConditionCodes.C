@@ -73,12 +73,12 @@ void ConditionCodes::setConditionCode(bool value, int32_t ccNum,
 {
 	if ((ccNum >= 0 && ccNum < 64) && value == 1) { 
 		error = false;
-		Tools::setBits(codes, ccNum, value);
+		codes = Tools::setBits(codes, ccNum, ccNum);
 	}
 	else if ((ccNum >= 0 && ccNum < 64) && value == 0) {
 		error = false;
-                Tools::clearBits(codes, ccNum, value);
-        }
+                codes = Tools::clearBits(codes, ccNum, ccNum);
+       }
 	else {
 		error = true;
    //Use your setBits and clearBits in Tools.C. 
