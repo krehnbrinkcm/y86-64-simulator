@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include "ConditionCodes.h"
-#include "Tools.h"
+#include "../inc/Tools.h"
 
 //cc_instance will be initialized to reference the single 
 //instance of ConditionCodes
@@ -27,9 +27,9 @@ ConditionCodes::ConditionCodes()
 ConditionCodes * ConditionCodes::getInstance()
 {
 	if(ccInstance == NULL) {
-	    ccInstance = new ConditionCodes();
+		ccInstance = new ConditionCodes();
 	}
-	return ccInstance;
+		return ccInstance;
 }
 
 /*
@@ -48,7 +48,7 @@ bool ConditionCodes::getConditionCode(int32_t ccNum, bool & error)
 
 	if (ccNum >= 0 && ccNum < 64) {
 		error = false;
-		return getBits(codes, ccNum, ccNum);
+		return Tools::getBits(codes, ccNum, ccNum);
 	}
 	else {
 		error = true;
@@ -73,11 +73,11 @@ void ConditionCodes::setConditionCode(bool value, int32_t ccNum,
 {
 	if ((ccNum >= 0 && ccNum < 64) && value == 1) { 
 		error = false;
-		setBits(codes, ccNum, ccNum);
+		Tools::setBits(codes, ccNum, ccNum);
 	}
 	else if ((ccNum >= 0 && ccNum < 64) && value == 0) {
 		error = false;
-                clearBits(codes, ccNum, ccNum);
+                Tools::clearBits(codes, ccNum, ccNum);
         }
 	else {
 		error = true;
