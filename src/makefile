@@ -1,39 +1,36 @@
 #makefile to compile the .C files in this directory
 #and write the .o output to the ../obj directory
+#This makefile also creates the yess executable.
 CC = g++
 INC = ../inc
 BIN = ../bin
 OBJD = ../obj
-CFLAGS = -g -c -Wall -std=c++11 -I $(INC)
-OBJ = $(OBJD)/ConditionCodes.o $(OBJD)/Memory.o $(OBJD)/RegisterFile.o $(OBJD)/Tools.o 
-
+CFLAGS = -g -c -Wall -Wno-unused-variable -std=c++11 -I $(INC)
+OBJ = $(OBJD)/Tools.o $(OBJD)/Memory.o $(OBJD)/ConditionCodes.o \
+      $(OBJD)/RegisterFile.o 
 
 #rule to match .C with object in another directory
-$(OBJD)/%.o: %.C create$(OBJD)
-	$(CC) $(CFLAGS) $< -o $(OBJD)/$@
+$(OBJD)/%.o: %.C 
+	@mkdir -p $(OBJD)
+	$(CC) $(CFLAGS) $< -o $@
 
-#1) need a macro for the .o files corresponding to the .C 
-#   files in this directory (note they will be stored in the ../obj
-#   directory
-#2) need a target (with a name that doesn't match a file)
-#   that is dependent upon the .o files 
-#3) need a .o target for each .C
-#4) need a clean target to delete the .o files in the ../obj directory
+#1) Need a .o target for the new .C files (String.C, yess.C, Loader.C)
+#   Add those targets to the OBJ macro.
+#
+#2) Need a ../bin/yess target that links together the .o files
+#   to create a ../bin/yess executable (make the first target in
+#   the makefile).  It actually doesn't need all of the .o files
+#   yet, but it doesn't hurt to link them into the executable
+#   Use the OBJ and BIN macros
 
-target: $(OBJ)
-
-$(OBJD)/ConditionCodes.o: $(INC)/ConditionCodes.h $(INC)/Tools.h
-
-$(OBJD)/Memory.o: $(INC)/Memory.h $(INC)/Tools.h
-
-$(OBJD)/RegisterFile.o: $(INC)/RegisterFile.h $(INC)/Tools.h
+#The rules below should match what you had in your old makefile
+$(OBJD)/Memory.o: $(INC)/Tools.h $(INC)/Memory.h
 
 $(OBJD)/Tools.o: $(INC)/Tools.h
 
-clean:
-	rm $(OBJ) 
+$(OBJD)/RegisterFile.o: $(INC)/RegisterFile.h
 
-#This rule creates the ../obj directory if it doesn't exist
-#This needs to be at the bottom of the makefile
-create$(OBJD):
-	mkdir -p $(OBJD)
+$(OBJD)/ConditionCodes.o: $(INC)/ConditionCodes.h $(INC)/Tools.h
+
+clean:
+	rm -f $(OBJ)
