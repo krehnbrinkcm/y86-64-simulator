@@ -12,15 +12,20 @@
  *
  * Modifies: str and length data members
  */
-String::String(std::string str)
-{
+String::String(std::string str){
    //TODO
    //Dynamically allocate an array of chars just large enough to 
    //hold the chars of the std::string.
+	char a[str.length()];
+	for (int i = 0; i < (int)str.length(); i++) {
+		a[i] = str.at(i);
+   	}
+	str = &a[0];
    //Don't store the NULL or allocate space for it.
    //Copy the characters in the std::string (excluding a NULL)
    //into your str array.
    //Set length to the size of the array.
+	length = str.length();
 
 }
 
@@ -29,15 +34,20 @@ String::String(std::string str)
  *
  * Build a return a c-str from the array of characters.
  */
-char * String::get_cstr()
-{
+char * String::get_cstr() {
    //TODO
    //You need to dynamically allocate space (array of char) for the
    //c-string that you are building
    //That space needs to include space for a NULL
+	char a[length+1];
+	for (int i = 0; i < length; i++){
+		a[i] = *str;
+	}
+	a[length] = NULL;
+
    //Don't forget to add the NULL.
    
-   return (char *)"";  
+   return &a[0];  
 }
 
 /*
