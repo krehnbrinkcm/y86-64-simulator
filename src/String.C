@@ -3,6 +3,7 @@
 #include <string.h> //for c-string functions (strlen, strcpy, ..)
 #include "Debug.h"
 #include "String.h"
+#include "ctype.h"
 
 /*
  * String
@@ -16,17 +17,15 @@ String::String(std::string str){
    //TODO
    //Dynamically allocate an array of chars just large enough to 
    //hold the chars of the std::string.
-	char a[str.length()];
-	for (int i = 0; i < (int)str.length(); i++) {
-		a[i] = str.at(i);
+   	length = str.length();
+	this->str = (char*) malloc(length);
+	for (int i = 0; i < length; i++) {
+		this->str[i] = str.at(i);
    	}
-	str = &a[0];
    //Don't store the NULL or allocate space for it.
    //Copy the characters in the std::string (excluding a NULL)
    //into your str array.
    //Set length to the size of the array.
-	length = str.length();
-
 }
 
 /*
@@ -38,16 +37,13 @@ char * String::get_cstr() {
    //TODO
    //You need to dynamically allocate space (array of char) for the
    //c-string that you are building
-   //That space needs to include space for a NULL
-	char a[length+1];
+   //That space needs to include space for a NULL       
+	char * cstr = (char*) malloc(length+1);
 	for (int i = 0; i < length; i++){
-		a[i] = *str;
+		cstr[i] = this->str[i];	
 	}
-	a[length] = NULL;
-
    //Don't forget to add the NULL.
-   
-   return &a[0];  
+   return cstr;
 }
 
 /*
@@ -61,7 +57,8 @@ std::string String::get_stdstr()
    //You need to declare std::string and append the characters
    //from your str array to it
    std::string result; //here's the declaration
-   
+   for (int i = 0; i < length; i++)
+   result += str[i];
    return result; 
 }
 
@@ -74,7 +71,7 @@ int32_t String::get_length()
 {
    //TODO
    
-   return 0;  
+   return length;  
 }
 
 /*
@@ -85,9 +82,10 @@ int32_t String::get_length()
  */
 bool String::badIndex(int32_t idx)
 {
-   //TODO
-   
-   return false;
+   	//TODO
+	if (idx < 0 || idx > length-1)  
+   		return false;
+	return true;
 }
 
 /*
@@ -106,9 +104,20 @@ bool String::badIndex(int32_t idx)
 
 bool String::isSpaces(int32_t startIdx, int32_t endIdx, bool & error)
 {
-   //TODO
-   
-   return false;
+	//TODO
+	if (startIdx < 0 || endIdx > length-1 || startIdx > endIdx) {
+		error = true;
+		return false;
+	}
+	else {
+		error = false;
+		for (int i = startIdx; i <= endIdx; i++) {
+			if (str[i] != ' ') {
+				return false;
+			} 
+		}
+		return true;
+	}
 }
 
 /*
@@ -133,9 +142,22 @@ bool String::isSpaces(int32_t startIdx, int32_t endIdx, bool & error)
  */
 uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
 {
-   //TODO
-   
-   return 0;
+	if (startIdx < 0 || endIdx > length-1 || startIdx > endIdx) {
+                error = true;
+                return 0;
+        }
+	else {
+		uint32_t rtn = 0;
+		for (int i = endIdx; i >= startIdx; i--) {
+                	if (!isxdigit(str[i])) {
+				error = true;
+                                return 0;
+                        }
+                }
+		error = false;
+		return strtoul(str,nullptr,6); 
+
+	}
 }
 
 /* 
@@ -149,9 +171,16 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
  */
 bool String::isChar(char what, int32_t idx, bool & error)
 {
-   //TODO
-   
-   return 0;
+	if (idx < 0 || idx > length-1) {
+		error = true;
+		return false;
+	}
+	else {
+		error = false;
+		if (str[idx] == what)
+			return true;
+		return false;
+	}
 }      
 
 /*
@@ -169,9 +198,7 @@ bool String::isChar(char what, int32_t idx, bool & error)
  */
 bool String::isSubString(char * subStr, int32_t idx, bool & error)
 {
-   //TODO
-   
-   return false;
+	return false; 
 }
 
 
