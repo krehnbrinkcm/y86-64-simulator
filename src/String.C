@@ -155,7 +155,7 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
                         }
                 }
 		error = false;
-		return strtoul(str,nullptr,6); 
+		return strtol(str, NULL, 16); 
 
 	}
 }
