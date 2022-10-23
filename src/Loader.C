@@ -150,9 +150,11 @@ bool Loader::load()
         }
       //Otherwise, load any data on the line into
       //memory
-	else {
-	    liloadLine(line);
-	    for(int i = DATABEGIN; i < line.getlen 
+	else { 
+	    for(int i = DATABEGIN; i < 26; i+2)
+	    {
+		mem[convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], error)];    
+	    }
 	}
       //Don't do all of this work in this method!
       //Break the work up into multiple single purpose methods
@@ -188,6 +190,7 @@ bool hasAdd(String line)
 
 std::string getData(String line)
 {
+    bool boo3;
     std::string newLine = "";
     for(int i = DATABEGIN; i < MAXBYTES; i++)
     {
@@ -250,7 +253,6 @@ std::string loadLine(String line)
 	}
     }  
 }
-
 
 
 

@@ -46,23 +46,6 @@ Memory * Memory::getInstance()
  */
 uint64_t Memory::getLong(int32_t address, bool & imem_error)
 {
-/*	
-	uint64_t num = 0;
-	if (address >= 0 && address < MEMSIZE && address % 8 == 0){
-		imem_error = false;
-		for (int i = 0; i < 7; i++) {
-			num += mem[address + i];
-			num = num >> 8;
-		}
-		num += mem[address + 7];		
-	}
-	else{
-		imem_error = true;
-		return 0;
-	}
-	return num;
-*/
-
 	if ( address >= 0 && (address < MEMSIZE) && (address % 8) == 0) {
 		uint64_t val = Tools::buildLong(&mem[address]);
 		imem_error = false;
