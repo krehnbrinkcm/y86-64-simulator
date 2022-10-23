@@ -13,7 +13,7 @@ class Loader
       //TODO
       //add declarations for other methods used by your loader
       bool hasData(String);
-      String getData(String); 
+      uint32_t getData(String); 
       bool hasComm(String);
       bool hasAdd(String);
       String getAdd(String);
