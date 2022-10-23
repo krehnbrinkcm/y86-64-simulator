@@ -132,14 +132,21 @@ bool Loader::load()
       //create a String to contain the std::string
       //Now, all accesses to the input line MUST be via your
       //String class methods
-      std::string inputLine(line);
+        std::string inputLine(line);
 
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-      getData(line);
+        if(hasData(line) == false) {
+	    printErrMsg(BADDATA, -1, inputFile);
+	    if(hasComm(line) == false) {
+		printErrMsg(BADCOM, -1, inputFile);
+	    }  
+        }
       //if the line is a comment record with errors
       //then print the BADCOM error message and return false
-   //checkComment(line);
+        else if(hasComm(line) == false) {
+	    printErrMsg(BADCOM, -1, inputFile);
+        }
       //Otherwise, load any data on the line into
       //memory
       //
@@ -165,18 +172,23 @@ bool hasData(String line)
 }
 
 
-
 String getData(String line)
 {
     std::string newLine = "";
-    for(int i = DATABEGIN; i < (COMMENT - 2); i++)
+    for(int i = DATABEGIN; i < MAXBYTES; i++)
     {
 	newLine += line.get_cstr()[i];	
     }
     return newLine; 
-     
-//   const char* ptr = line.c_str();
-  //  return true;  
+}
+
+bool hasComm(String line)
+{
+    if(!isblank(line.get_cstr()[COMMENT])) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -187,9 +199,6 @@ String getData(String line)
 
 //bool Loader::loadLine(std::string line)
 
-//bool Loader::checkComment(std::string Line)
-
-//
 
 
 
