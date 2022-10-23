@@ -84,7 +84,7 @@ bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line)
 bool Loader::openFile()
 {
    //TODO
-   bool booo = false;
+   bool booo;
 
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the USAGE error message and return false
@@ -93,7 +93,8 @@ bool Loader::openFile()
    } 
    //If the filename is badly formed (doesn't end in a .yo)
    //then print the BADFILE error message and return false
-   if(inputFile->isSubString(".yo", 0, booo) != true)
+   std::string yo = ".yo";
+   if(inputFile->isSubString(yo, 0, booo) != true)
    {
 	return printErrMsg(BADFILE, -1, inputFile);	
    } 
@@ -105,7 +106,7 @@ bool Loader::openFile()
    ifs.open (in, std::ifstream::in);
    if(!ifs.good()) {
 	return printErrMsg(OPENERR, -1, inputFile);
-   }  
+   }   
    return true;//file name is good and file open succeeded
 }
 
@@ -149,7 +150,10 @@ bool Loader::load()
         }
       //Otherwise, load any data on the line into
       //memory
-      //
+	else {
+	    liloadLine(line);
+	    for(int i = DATABEGIN; i < line.getlen 
+	}
       //Don't do all of this work in this method!
       //Break the work up into multiple single purpose methods
 
@@ -171,8 +175,18 @@ bool hasData(String line)
     }   
 }
 
+bool hasAdd(String line)
+{
+    bool boo2;
+    std::string need = "0x";
+    if(line.isSubString(need, 0, boo2) == true) {
+	return true;
+    } else {
+	return false; 
+    }
+}
 
-String getData(String line)
+std::string getData(String line)
 {
     std::string newLine = "";
     for(int i = DATABEGIN; i < MAXBYTES; i++)
@@ -191,13 +205,51 @@ bool hasComm(String line)
     }
 }
 
+std::string getAdd(String line)
+{
+    std::string newline3 = "";
+    for(int i = 0; i < ADDREND; i++)
+    {
+	newline3 += line.get_cstr()[i];
+    }
+    return newline3; 
+} 
 
 
-//String hasComment(String line)
-//{
-//    for(int j = COMMENT; j <   
+std::string getComm(String line)
+{
+    std::string newline2 = "";
+    for(int j = COMMENT; j < line.get_length(); j++)
+    {
+	newline2 += line.get_cstr()[j];
+    }
+    return newline2;
+}
+   
 
-//bool Loader::loadLine(std::string line)
+std::string loadLine(String line)
+{ 
+    std::string finalLine = "";
+    if(hasAdd(line) == true) {
+	finalLine += getAdd(line);
+	if(hasData(line) == true) {
+	    finalLine += getData(line);
+	    if(hasComm(line) == true) {
+		return finalLine += getComm(line);
+	    } else {
+		return finalLine;	
+	    }
+	} else
+	    return finalLine;
+    } else {
+	if(hasComm(line) == true)
+	{
+	    return finalLine += hasComm(line);
+	} else {
+	    return finalLine;
+	}
+    }  
+}
 
 
 
