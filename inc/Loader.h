@@ -12,7 +12,8 @@ class Loader
 
       //TODO
       //add declarations for other methods used by your loader
-      
+      bool hasData(String);
+      String getData(String); 
    public:
       //methods called outside of class
       Loader(int argc, char * argv[], Memory * mem);

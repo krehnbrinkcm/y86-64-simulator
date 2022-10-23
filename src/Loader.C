@@ -84,6 +84,7 @@ bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line)
 bool Loader::openFile()
 {
    //TODO
+   bool booo = false;
 
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the USAGE error message and return false
@@ -92,13 +93,17 @@ bool Loader::openFile()
    } 
    //If the filename is badly formed (doesn't end in a .yo)
    //then print the BADFILE error message and return false
-   
-    
+   if(inputFile->isSubString(".yo", 0, booo) != true)
+   {
+	return printErrMsg(BADFILE, -1, inputFile);	
+   } 
    //open the file using an std::ifstream open
    //if the file can't be opened then print the OPENERR message 
    //and return false 
    std::ifstream ifs;
-   if(!ifs.is_open()) {
+   const char* in = inputFile->get_cstr();
+   ifs.open (in, std::ifstream::in);
+   if(!ifs.good()) {
 	return printErrMsg(OPENERR, -1, inputFile);
    }  
    return true;//file name is good and file open succeeded
@@ -127,11 +132,11 @@ bool Loader::load()
       //create a String to contain the std::string
       //Now, all accesses to the input line MUST be via your
       //String class methods
-    //String inputLine(line);
+      std::string inputLine(line);
 
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-   //checkData(line);
+      getData(line);
       //if the line is a comment record with errors
       //then print the BADCOM error message and return false
    //checkComment(line);
@@ -149,6 +154,42 @@ bool Loader::load()
 }
 
 //add helper methods here and to Loader.h
+
+bool hasData(String line)
+{
+    if(!isblank(line.get_cstr()[DATABEGIN])) {
+	return true;
+    } else { 
+	return false;
+    }   
+}
+
+
+
+String getData(String line)
+{
+    std::string newLine = "";
+    for(int i = DATABEGIN; i < (COMMENT - 2); i++)
+    {
+	newLine += line.get_cstr()[i];	
+    }
+    return newLine; 
+     
+//   const char* ptr = line.c_str();
+  //  return true;  
+}
+
+
+
+//String hasComment(String line)
+//{
+//    for(int j = COMMENT; j <   
+
+//bool Loader::loadLine(std::string line)
+
+//bool Loader::checkComment(std::string Line)
+
+//
 
 
 
