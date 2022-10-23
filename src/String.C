@@ -43,6 +43,7 @@ char * String::get_cstr() {
 		cstr[i] = this->str[i];	
 	}
    //Don't forget to add the NULL.
+   cstr[length] = 0;
    return cstr;
 }
 
@@ -140,6 +141,7 @@ bool String::isSpaces(int32_t startIdx, int32_t endIdx, bool & error)
  *  3) sets error to true and returns 0 if the indices are valid but the
  *     characters are not hex
  */
+
 uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
 {
 	if (startIdx < 0 || endIdx > length-1 || startIdx > endIdx) {
@@ -155,7 +157,7 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
                         }
                 }
 		error = false;
-		return strtoul(str,nullptr,6); 
+		return strtol(str, NULL, 16); 
 
 	}
 }
@@ -198,7 +200,20 @@ bool String::isChar(char what, int32_t idx, bool & error)
  */
 bool String::isSubString(char * subStr, int32_t idx, bool & error)
 {
-	return false; 
+	if (idx < 0 || idx > length-1 || idx + strlen(subStr) > (uint32_t)length) {
+                error = true;
+                return false;
+        }
+	int c = 0;
+	for (uint32_t i = idx; i < strlen(subStr); i++) {
+		if (str[i] != subStr[c]) {
+			error = false;
+			return false;
+		}
+	c++;
+	}
+	error = false;
+	return true;	
 }
 
 
@@ -217,9 +232,20 @@ bool String::isSubString(char * subStr, int32_t idx, bool & error)
  */
 bool String::isSubString(std::string subStr, int32_t idx, bool & error)
 {  
-   //TODO
-   
-   return false;
+	 if (idx < 0 || idx > length-1 || idx + subStr.length() > (uint32_t)length) {
+                error = true;
+                return false;
+        }
+        int c = 0;
+        for (uint32_t i = idx; i < subStr.length(); i++) {
+                if (str[i] != subStr[c]) {
+                        error = false;
+                        return false;
+                }
+        c++;
+        }
+        error = false;
+        return true;
 }
 
  

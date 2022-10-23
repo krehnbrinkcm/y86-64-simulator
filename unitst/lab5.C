@@ -45,7 +45,7 @@ int main(int argc, char * argv[])
    assert(error == true);
 
    //test the convert2Hex method
-  /* String str4((char *)"0x2aA: 123e5678");
+   String str4((char *)"0x2aA: 123e5678");
    assert(str4.convert2Hex(2, 4, error) == 0x2aA);
    assert(error == false);
    assert(str4.convert2Hex(7, 8, error) == 0x12);
@@ -96,7 +96,7 @@ int main(int argc, char * argv[])
    assert(error == true);
    assert(str7.convert2Hex(9, 10, error) == 0);
    assert(error == true);
-*/
+
    //test the isChar method
    String str8((char *)"0xabc: abc123");
    assert(str8.isChar('0', 0, error) == true);
