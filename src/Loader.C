@@ -88,24 +88,20 @@ bool Loader::openFile()
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the USAGE error message and return false
    if(inputFile == NULL) {
-	return printErrMsg(USAGE, -1, -1);
-	
-   }  
+	return printErrMsg(USAGE, -1, inputFile);	
+   } 
    //If the filename is badly formed (doesn't end in a .yo)
    //then print the BADFILE error message and return false
-   char dh = ".yo"
-
-   else if(inf.find(dh) == string::npos) {
-	return printErrMsg(BADFILE, -1, -1);
-   } 
+   
+    
    //open the file using an std::ifstream open
    //if the file can't be opened then print the OPENERR message 
-   //and return false
-   std::ifstream ifs(inf)
-   if(!ifs.open()) {
-	return printErrMsg(OPENERR, -1, -1)
+   //and return false 
+   std::ifstream ifs;
+   if(!ifs.is_open()) {
+	return printErrMsg(OPENERR, -1, inputFile);
    }  
-   return true;  //file name is good and file open succeeded
+   return true;//file name is good and file open succeeded
 }
 
 /*
@@ -121,6 +117,7 @@ bool Loader::openFile()
 */   
 bool Loader::load()
 {
+
    if (!openFile()) return false;
 
    std::string line;
@@ -130,14 +127,14 @@ bool Loader::load()
       //create a String to contain the std::string
       //Now, all accesses to the input line MUST be via your
       //String class methods
-      String inputLine(line);
+    //String inputLine(line);
 
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-      checkData(line);
+   //checkData(line);
       //if the line is a comment record with errors
       //then print the BADCOM error message and return false
-      checkComment(line);
+   //checkComment(line);
       //Otherwise, load any data on the line into
       //memory
       //
@@ -152,28 +149,7 @@ bool Loader::load()
 }
 
 //add helper methods here and to Loader.h
-bool checkAddress(String line) {
-    
 
-    }
-
-
-
-bool checkData(String line) {
-    if(!isblank(line.c_str()[DATABEGIN])) {
-	return true;
-    }
-    else {
-   	return printErrMsg(BADDATA, -1, -1);
-    }
-
-bool checkComment(String line) {
-    if(!isblank(line.c_str()[COMMENT])) {
-	return true;
-    }
-    else {
-	return printErrMsg(BADCOM, -1, -1);
-    }
 
 
 
