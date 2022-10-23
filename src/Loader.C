@@ -94,7 +94,8 @@ bool Loader::openFile()
    //If the filename is badly formed (doesn't end in a .yo)
    //then print the BADFILE error message and return false
    std::string yo = ".yo";
-   if(inputFile->isSubString(yo, 0, booo) != true)
+   bool error = false;
+   if(inputFile->isSubString(yo, inputFile->get_length() - 3, error) != true)
    {
 	return printErrMsg(BADFILE, -1, inputFile);	
    } 
