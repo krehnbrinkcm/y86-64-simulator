@@ -149,16 +149,18 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
                 return 0;
         }
 	else {
-		uint32_t rtn = 0;
-		for (int i = endIdx; i >= startIdx; i--) {
+		int vidx = 0;
+		char * valid = new char[endIdx - startIdx + 1];
+		for (int i = startIdx; i <= endIdx; i++) {
                 	if (!isxdigit(str[i])) {
 				error = true;
                                 return 0;
                         }
+			valid[vidx] = str[i];
+			vidx++;
                 }
 		error = false;
-		return strtol(str, NULL, 16); 
-
+		return strtol(valid, NULL, 16); 
 	}
 }
 
