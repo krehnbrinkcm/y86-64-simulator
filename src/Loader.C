@@ -120,8 +120,9 @@ bool Loader::openFile()
 */   
 bool Loader::load()
 {
+   if (!openFile()) return false;
 
-   openFile();
+
    std::string line;
    int lineNumber = 1;  //needed if an error is found
    while (getline(inf, line))
@@ -129,11 +130,11 @@ bool Loader::load()
       //create a String to contain the std::string
       //Now, all accesses to the input line MUST be via your
       //String class methods
-        std::string inputLine(line);
+        String inputLine(line);
 
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-        if(hasData(line) == false) {
+        if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
 	    printErrMsg(BADDATA, -1, inputFile);
 	    if(hasComm(line) == false) {
 		printErrMsg(BADCOM, -1, inputFile);
@@ -163,6 +164,7 @@ bool Loader::load()
 }
 
 //add helper methods here and to Loader.h
+
 
 bool hasData(String line)
 {
