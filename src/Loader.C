@@ -84,12 +84,10 @@ bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line)
 bool Loader::openFile()
 {
    //TODO
-   bool booo;
-
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the USAGE error message and return false
    if(inputFile == NULL) {
-	return printErrMsg(USAGE, -1, inputFile);	
+	return printErrMsg(USAGE, -1, NULL);	
    } 
    //If the filename is badly formed (doesn't end in a .yo)
    //then print the BADFILE error message and return false
@@ -97,16 +95,14 @@ bool Loader::openFile()
    bool error = false;
    if(inputFile->isSubString(yo, inputFile->get_length() - 3, error) != true)
    {
-	return printErrMsg(BADFILE, -1, inputFile);	
+	return printErrMsg(BADFILE, -1, NULL);	
    } 
    //open the file using an std::ifstream open
    //if the file can't be opened then print the OPENERR message 
    //and return false 
-   std::ifstream ifs;
-   const char* in = inputFile->get_cstr();
-   ifs.open (in, std::ifstream::in);
-   if(!ifs.good()) {
-	return printErrMsg(OPENERR, -1, inputFile);
+   inf.open(inputFile->get_cstr(), std::ifstream::in);
+   if(!inf.is_open()) {
+	return printErrMsg(OPENERR, -1, NULL);
    }   
    return true;//file name is good and file open succeeded
 }
@@ -154,7 +150,7 @@ bool Loader::load()
 	else { 
 	    for(int i = DATABEGIN; i < 26; i+2)
 	    {
-		mem[convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], error)];    
+	//	mem[convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], error)];    
 	    }
 	}
       //Don't do all of this work in this method!
