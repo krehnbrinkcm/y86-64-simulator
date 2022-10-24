@@ -121,8 +121,7 @@ bool Loader::openFile()
 bool Loader::load()
 {
 
-   if (!openFile()) return false;
-
+   openFile();
    std::string line;
    int lineNumber = 1;  //needed if an error is found
    while (getline(inf, line))

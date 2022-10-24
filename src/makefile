@@ -19,7 +19,7 @@ $(BIN)/yess: $(OBJ)
 
 #1) Need a .o target for the new .C files (String.C, yess.C, Loader.C)
 #   Add those targets to the OBJ macro.
-$(OBJD)/String.o: $(INC)/String.h
+$(OBJD)/String.o: $(INC)/String.h  
 
 $(OBJD)/Loader.o: $(INC)/Loader.h $(INC)/Memory.h $(INC)/String.h
 
