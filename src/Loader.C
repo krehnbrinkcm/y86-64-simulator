@@ -136,9 +136,9 @@ bool Loader::load()
       //then print the BADDATA error message and return false
         if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
 	    printErrMsg(BADDATA, -1, inputFile);
-	    if(hasComm(line) == false) {
-		printErrMsg(BADCOM, -1, inputFile);
-	    }  
+//	    if(hasComm(line) == false) {
+//		printErrMsg(BADCOM, -1, inputFile);
+//	    }  
         }
       //if the line is a comment record with errors
       //then print the BADCOM error message and return false
@@ -148,7 +148,7 @@ bool Loader::load()
       //Otherwise, load any data on the line into
       //memory
 	else { 
-	    for(int i = DATABEGIN; i < 26; i+2)
+	    for(int i = DATABEGIN; i < 26; i++)
 	    {
 	//	mem[convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], error)];    
 	    }

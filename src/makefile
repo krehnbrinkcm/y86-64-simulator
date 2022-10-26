@@ -16,6 +16,7 @@ $(OBJD)/%.o: %.C
 	$(CC) $(CFLAGS) $< -o $@
 
 $(BIN)/yess: $(OBJ)
+	$(CC)  $(OBJ) -o $(BIN)/yess 
 
 #1) Need a .o target for the new .C files (String.C, yess.C, Loader.C)
 #   Add those targets to the OBJ macro.
@@ -31,7 +32,6 @@ $(OBJD)/yess.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h
 #   the makefile).  It actually doesn't need all of the .o files
 #   yet, but it doesn't hurt to link them into the executable
 #   Use the OBJ and BIN macros
-
 
 
 
