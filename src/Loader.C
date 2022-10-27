@@ -87,22 +87,24 @@ bool Loader::openFile()
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the USAGE error message and return false
    if(inputFile == NULL) {
-	return printErrMsg(USAGE, -1, NULL);	
+	printErrMsg(USAGE, -1, NULL);	
+	return false;
    } 
    //If the filename is badly formed (doesn't end in a .yo)
    //then print the BADFILE error message and return false
    std::string yo = ".yo";
    bool error = false;
-   if(inputFile->isSubString(yo, inputFile->get_length() - 3, error) != true)
-   {
-	return printErrMsg(BADFILE, -1, NULL);	
+   if(inputFile->isSubString(yo, inputFile->get_length() - 3, error) != true) {
+	printErrMsg(BADFILE, -1, NULL);	
+	return false;
    } 
    //open the file using an std::ifstream open
    //if the file can't be opened then print the OPENERR message 
    //and return false 
-   inf.open(inputFile->get_cstr(), std::ifstream::in);
+   inf.open(inputFile->get_cstr());
    if(!inf.is_open()) {
-	return printErrMsg(OPENERR, -1, NULL);
+	printErrMsg(OPENERR, -1, NULL);
+	return false; 
    }   
    return true;//file name is good and file open succeeded
 }
@@ -131,13 +133,19 @@ bool Loader::load()
       //String class methods
       String inputLine(line);
 	bool boo2;
+	bool boo3;
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-      if(hasAdd(inputLine) == false) {
+     /* if(hasAdd(inputiine) == false) {
 	   if(hasData(inputLine) == false) {
 		 printErrMsg(BADDATA, -1, inputFile);
            }
-        
+*/
+	if(inputLine.isSubString((char *) "0x", 0, boo2)) {
+	    int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo3);
+            if(hasData(inputLine) == false) {
+                return printErrMsg(BADDATA, -1, inputFile);
+            }        
 
     //if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
       //if the line is a comment record with errors
@@ -148,6 +156,10 @@ bool Loader::load()
 	    printErrMsg(BADCOM, -1, inputFile);
             }
 	}
+
+	
+
+
       //Otherwise, load any data on the line into
       //memory
 	int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo2);
@@ -173,34 +185,89 @@ bool Loader::load()
 
 //add helper methods here and to Loader.h
 
+/*
 
 bool Loader::hasData(String line)
 {
-    if(){       
+    if(hasAdd(line)== true) { 
+	int j = DATABEGIN;
+	int data = 0
+	bool boo;
+        //check if the numbers are even 
+	while(line.isSpaces(j, DATAEND, boo) !=  false) {
+	    data = line.convert2Hex(line.get_cstr()[j], line.get_cstr()[j+1], boo);
+	}
+        if(line.get_length()/2) {
+	//check for bytes is not more then 10
+	//check if there is a proper address for it 	
 	return false;
     } else { 
 	return true;
     }   
 }
 
+
 bool Loader::hasAdd(String line)
 {
     bool boo2;
     std::string need = "0x";
+    int j = ADDRBEGIN
+    uint32_t addr = 0  
     if(line.isSubString(need, 0, boo2) == true) {
+	while (line.isChar(':', j, boo2) != true) { 
+	    uint32_t addr = line.convert2Hex(line.get_cstr()[j], line.get_cstr()[j+1], boo2);
+	}
+	if(addr == 0x100)
+	{
+	    return false;
+	}	    		
 	return true;
     } else {
 	return false; 
     }
 }
+*/
+
+bool Loader::hasAdd(String line)
+{
+    return true; 
+}
+
+bool Loader::hasData(String line)
+{
+    bool boo;
+    if(line.isChar(':', (ADDREND + 1), boo) == true) {
+	if(line.isChar(' ', ADDREND + 2, boo) == true) {
+	    int i = DATABEGIN;
+	    while(line.isChar(' ', i, boo) == false) {
+		line.convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], boo);
+		if(boo) {
+		    i += 2;
+		}
+	    }
+	    if(line.isChar('|', COMMENT, boo) == true) {
+		return true;
+	    }	    	
+	}
+	return false;
+     }
+     return false; 
+}
+
 
 bool Loader::hasComm(String line)
 {
+ /*
+    bool boo; 
+    
     if(!isblank(line.get_cstr()[COMMENT])) {
         return true;
     } else {
         return false;
     }
+ */
+
+   return true;
 }
 
 
