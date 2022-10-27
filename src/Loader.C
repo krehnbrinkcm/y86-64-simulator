@@ -122,7 +122,6 @@ bool Loader::load()
 {
    if (!openFile()) return false;
 
-
    std::string line;
    int lineNumber = 1;  //needed if an error is found
    while (getline(inf, line))
@@ -130,32 +129,41 @@ bool Loader::load()
       //create a String to contain the std::string
       //Now, all accesses to the input line MUST be via your
       //String class methods
-        String inputLine(line);
-
+      String inputLine(line);
+	bool boo2;
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-        if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
-	    printErrMsg(BADDATA, -1, inputFile);
-//	    if(hasComm(line) == false) {
-//		printErrMsg(BADCOM, -1, inputFile);
-//	    }  
-        }
+      if(hasAdd(inputLine) == false) {
+	   if(hasData(inputLine) == false) {
+		 printErrMsg(BADDATA, -1, inputFile);
+           }
+        
+
+    //if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
       //if the line is a comment record with errors
       //then print the BADCOM error message and return false
-        else if(hasComm(line) == false) {
+    //else
+	} else {
+	    if (hasComm(inputLine) == false) {
 	    printErrMsg(BADCOM, -1, inputFile);
-        }
+            }
+	}
       //Otherwise, load any data on the line into
       //memory
-	else { 
-	    for(int i = DATABEGIN; i < 26; i++)
-	    {
-	//	mem[convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], error)];    
-	    }
+	int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo2);
+
+	int j = DATABEGIN;
+
+	while(inputLine.isChar(' ', j, boo2) != true) {
+	    uint8_t byte = inputLine.convert2Hex(inputLine.get_cstr()[j], inputLine.get_cstr()[j+1], boo2);
+	    mem ->putByte(byte, addr, boo2);
+	    addr++;
+	    j+= 2;
 	}
+
+	
       //Don't do all of this work in this method!
       //Break the work up into multiple single purpose methods
-
       //increment the line number for next iteration
       lineNumber++;
    }
@@ -166,16 +174,16 @@ bool Loader::load()
 //add helper methods here and to Loader.h
 
 
-bool hasData(String line)
+bool Loader::hasData(String line)
 {
-    if(!isblank(line.get_cstr()[DATABEGIN])) {
-	return true;
-    } else { 
+    if(){       
 	return false;
+    } else { 
+	return true;
     }   
 }
 
-bool hasAdd(String line)
+bool Loader::hasAdd(String line)
 {
     bool boo2;
     std::string need = "0x";
@@ -186,18 +194,7 @@ bool hasAdd(String line)
     }
 }
 
-std::string getData(String line)
-{
-    bool boo3;
-    std::string newLine = "";
-    for(int i = DATABEGIN; i < MAXBYTES; i++)
-    {
-	newLine += line.get_cstr()[i];	
-    }
-    return newLine; 
-}
-
-bool hasComm(String line)
+bool Loader::hasComm(String line)
 {
     if(!isblank(line.get_cstr()[COMMENT])) {
         return true;
@@ -205,53 +202,6 @@ bool hasComm(String line)
         return false;
     }
 }
-
-std::string getAdd(String line)
-{
-    std::string newline3 = "";
-    for(int i = 0; i < ADDREND; i++)
-    {
-	newline3 += line.get_cstr()[i];
-    }
-    return newline3; 
-} 
-
-
-std::string getComm(String line)
-{
-    std::string newline2 = "";
-    for(int j = COMMENT; j < line.get_length(); j++)
-    {
-	newline2 += line.get_cstr()[j];
-    }
-    return newline2;
-}
-   
-
-std::string loadLine(String line)
-{ 
-    std::string finalLine = "";
-    if(hasAdd(line) == true) {
-	finalLine += getAdd(line);
-	if(hasData(line) == true) {
-	    finalLine += getData(line);
-	    if(hasComm(line) == true) {
-		return finalLine += getComm(line);
-	    } else {
-		return finalLine;	
-	    }
-	} else
-	    return finalLine;
-    } else {
-	if(hasComm(line) == true)
-	{
-	    return finalLine += hasComm(line);
-	} else {
-	    return finalLine;
-	}
-    }  
-}
-
 
 
 

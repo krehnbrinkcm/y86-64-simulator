@@ -13,12 +13,12 @@ class Loader
       //TODO
       //add declarations for other methods used by your loader
       bool hasData(String);
-      uint32_t getData(String); 
+      std::string getData(String); 
       bool hasComm(String);
       bool hasAdd(String);
-      String getAdd(String);
-      String getComm(String);
-      String loadLine(String);
+      std::string getAdd(String);
+      std::string getComm(String);
+      std::string loadLine(String);
    public:
       //methods called outside of class
       Loader(int argc, char * argv[], Memory * mem);
