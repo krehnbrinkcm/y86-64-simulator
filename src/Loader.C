@@ -123,7 +123,7 @@ bool Loader::openFile()
 bool Loader::load()
 {
    if (!openFile()) return false;
-
+   String * ptr;
    std::string line;
    int lineNumber = 1;  //needed if an error is found
    while (getline(inf, line))
@@ -134,6 +134,7 @@ bool Loader::load()
       String inputLine(line);
 	bool boo2;
 	bool boo3;
+        ptr = &inputLine;
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
      /* if(hasAdd(inputiine) == false) {
@@ -144,7 +145,7 @@ bool Loader::load()
 	if(inputLine.isSubString((char *) "0x", 0, boo2)) {
 	    int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo3);
             if(hasData(inputLine) == false) {
-                return printErrMsg(BADDATA, -1, inputFile);
+                return printErrMsg(BADDATA, lineNumber, ptr);
             }        
 
     //if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
@@ -153,7 +154,7 @@ bool Loader::load()
     //else
 	} else {
 	    if (hasComm(inputLine) == false) {
-	    printErrMsg(BADCOM, -1, inputFile);
+	    printErrMsg(BADCOM, lineNumber, ptr);
             }
 	}
 
@@ -237,17 +238,22 @@ bool Loader::hasData(String line)
 {
     bool boo;
     if(line.isChar(':', (ADDREND + 1), boo) == true) {
-	if(line.isChar(' ', ADDREND + 2, boo) == true) {
+	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
-	    while(line.isChar(' ', i, boo) == false) {
+	    while(line.isChar(' ', i, boo) != false) {
 		line.convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], boo);
 		if(boo) {
-		    i += 2;
-		}
+		  return false;
+		} 
+		i += 2;
 	    }
-	    if(line.isChar('|', COMMENT, boo) == true) {
-		return true;
-	    }	    	
+            if(line.isChar(' ', (COMMENT - 1), boo) == true) { 
+	    	if(line.isChar('|', COMMENT, boo) == true) {
+		    return true;
+		}
+		return false;
+	    }
+	    return false;	    	
 	}
 	return false;
      }
