@@ -137,7 +137,7 @@ bool Loader::load()
         ptr = &inputLine;
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
-     /* if(hasAdd(inputiine) == false) {
+ /*     if(hasAdd(inputiine) == false) {
 	   if(hasData(inputLine) == false) {
 		 printErrMsg(BADDATA, -1, inputFile);
            }
@@ -163,13 +163,15 @@ bool Loader::load()
 
       //Otherwise, load any data on the line into
       //memory
+      //
+
 	int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo2);
 
 	int j = DATABEGIN;
 
 	while(inputLine.isChar(' ', j, boo2) != true) {
-	    uint8_t byte = inputLine.convert2Hex(inputLine.get_cstr()[j], inputLine.get_cstr()[j+1], boo2);
-	    mem ->putByte(byte, addr, boo2);
+	    int8_t byte = inputLine.convert2Hex(j,j+1, boo2);
+	    mem->putByte(byte, addr, boo2);
 	    addr++;
 	    j+= 2;
 	}
@@ -240,8 +242,8 @@ bool Loader::hasData(String line)
     if(line.isChar(':', (ADDREND + 1), boo) == true) {
 	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
-	    while(line.isChar(' ', i, boo) != false) {
-		line.convert2Hex(line.get_cstr()[i], line.get_cstr()[i+1], boo);
+	    while(line.isChar(' ', i, boo) != true) {
+		line.convert2Hex(i,i+1, boo);
 		if(boo) {
 		  return false;
 		} 
@@ -251,11 +253,8 @@ bool Loader::hasData(String line)
 	    	if(line.isChar('|', COMMENT, boo) == true) {
 		    return true;
 		}
-		return false;
-	    }
-	    return false;	    	
+	    }	    	
 	}
-	return false;
      }
      return false; 
 }
