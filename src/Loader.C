@@ -154,7 +154,7 @@ bool Loader::load()
     //else
 	} else {
 	    if (hasComm(inputLine) == false) {
-	    printErrMsg(BADCOM, lineNumber, ptr);
+	    return printErrMsg(BADCOM, lineNumber, ptr);
             }
 	}
 
