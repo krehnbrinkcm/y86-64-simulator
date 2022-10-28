@@ -126,6 +126,7 @@ bool Loader::load()
    String * ptr;
    std::string line;
    int lineNumber = 1;  //needed if an error is found
+   int lastAddr = -1;
    while (getline(inf, line))
    {
       //create a String to contain the std::string
@@ -143,7 +144,7 @@ bool Loader::load()
            }
 */
 	if(inputLine.isSubString((char *) "0x", 0, boo2)) {
-	    int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo3);
+	    //int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo3);
             if(hasData(inputLine) == false) {
                 return printErrMsg(BADDATA, lineNumber, ptr);
             }        
@@ -166,12 +167,17 @@ bool Loader::load()
       //
 
 	int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo2);
+        
+	
 
 	int j = DATABEGIN;
-
 	while(inputLine.isChar(' ', j, boo2) != true) {
 	    int8_t byte = inputLine.convert2Hex(j,j+1, boo2);
+	    if (addr <= lastAddr || addr >= MEMSIZE) {
+		return printErrMsg(BADDATA,lineNumber,ptr);
+	    }
 	    mem->putByte(byte, addr, boo2);
+	    lastAddr = addr;
 	    addr++;
 	    j+= 2;
 	}
