@@ -239,15 +239,22 @@ bool Loader::hasAdd(String line)
 bool Loader::hasData(String line)
 {
     bool boo;
+    
     if(line.isChar(':', (ADDREND + 1), boo) == true) {
 	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
+	    if (line.isChar(' ', DATABEGIN, boo) != true) {
 	    while(line.isChar(' ', i, boo) != true) {
 		line.convert2Hex(i,i+1, boo);
 		if(boo) {
 		  return false;
 		} 
 		i += 2;
+	    }
+            for (int j = i+1; j < COMMENT; j++ ) {
+		if (line.isChar(' ', j, boo) != true)
+			return false;
+	    }
 	    }
             if(line.isChar(' ', (COMMENT - 1), boo) == true) { 
 	    	if(line.isChar('|', COMMENT, boo) == true) {
