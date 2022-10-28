@@ -262,17 +262,14 @@ bool Loader::hasData(String line)
 
 bool Loader::hasComm(String line)
 {
- /*
     bool boo; 
     
-    if(!isblank(line.get_cstr()[COMMENT])) {
-        return true;
-    } else {
-        return false;
-    }
- */
-
-   return true;
+    if(line.isSpaces(0,COMMENT-1,boo)) {
+	if(line.isChar('|',COMMENT, boo)) {
+		return true;
+	}
+    } 
+   return false;
 }
 
 
