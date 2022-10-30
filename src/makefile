@@ -32,8 +32,6 @@ $(OBJD)/yess.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h $(INC)/RegisterF
 
 $(OBJD)/CPU.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/F.h $(INC)/D.h $(INC)/E.h $(INC)/M.h $(INC)/W.h $(INC)/Stage.h $(INC)/MemoryStage.h $(INC)/ExecuteStage.h $(INC)/DecodeStage.h $(INC)/FetchStage.h $(INC)/WritebackStage.h $(INC)/CPU.h
 
-$(OBJD)/Stage.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h
-
 $(OBJD)/F.o: $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/F.h
 
 $(OBJD)/D.o: $(INC)/Instructions.h $(INC)/RegisterFile.h $(INC)/PipeReg.h $(INC)/D.h $(INC)/Status.h
@@ -55,6 +53,9 @@ $(OBJD)/MemoryStage.o: $(INC)/Stage.h  $(INC)/MemoryStage.h
 $(OBJD)/WritebackStage.o: $(INC)/Stage.h $(INC)/WritebackStage.h  
 
 $(OBJD)/PipeReg.o: $(INC)/PipeRegField.h  $(INC)/PipeReg.h 
+
+ ##$(OBJD)/Stage.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h
+
 
 $(OBJD)/PipeRegField.o:  $(INC)/PipeRegField.h
 
@@ -86,3 +87,9 @@ $(OBJD)/ConditionCodes.o: $(INC)/ConditionCodes.h $(INC)/Tools.h
 
 clean:
 	rm -f $(OBJ)
+
+run:
+	make $(BIN)/yess
+	$(BIN)/run.sh
+
+
