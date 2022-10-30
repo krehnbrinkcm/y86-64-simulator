@@ -8,7 +8,7 @@ OBJD = ../obj
 CFLAGS = -g -c -Wall -Wno-unused-variable -std=c++11 -I $(INC)
 OBJ = $(OBJD)/Tools.o $(OBJD)/Memory.o $(OBJD)/ConditionCodes.o \
       $(OBJD)/RegisterFile.o $(OBJD)/String.o $(OBJD)/yess.o \
-      $(OBJD)/Loader.o $(OBJD)/CPU.o $(OBJD)/Stage $(OBJD)/F.o \
+      $(OBJD)/Loader.o $(OBJD)/CPU.o $(OBJD)/Stage.o $(OBJD)/F.o \
       $(OBJD)/D.o $(OBJD)/E.o $(OBJD)/M.o $(OBJD)/W.o \
       $(OBJD)/FetchStage.o $(OBJD)/DecodeStage.o $(OBJD)/ExecuteStage.o \
       $(OBJD)/MemoryStage.o $(OBJD)/WritebackStage.o $(OBJD)/PipeReg.o \
@@ -36,7 +36,7 @@ $(OBJD)/F.o: $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/F.h
 
 $(OBJD)/D.o: $(INC)/Instructions.h $(INC)/RegisterFile.h $(INC)/PipeReg.h $(INC)/D.h $(INC)/Status.h
 
-$(OBJD)/E.o: $(INC)/RegisterField.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/E.h $(INC)/Status.h
+$(OBJD)/E.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/E.h $(INC)/Status.h
 
 $(OBJD)/M.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/M.h $(INC)/Status.h
 
@@ -44,7 +44,7 @@ $(OBJD)/W.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $
 
 $(OBJD)/FetchStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/F.h $(INC)/D.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
 
-$(OBJD)/DecodeStage.o: $(INC)/Stage.h  $(INC)/DecodeStage.h
+$(OBJD)/DecodeStage.o: $(INC)/Stage.h $(INC)/Memory.h $(INC)/ConditionCodes.h $(INC)/RegisterFile.h $(INC)/PipeReg.h  $(INC)/DecodeStage.h
 
 $(OBJD)/ExecuteStage.o: $(INC)/Stage.h  $(INC)/ExecuteStage.h
 
