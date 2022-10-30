@@ -248,7 +248,8 @@ bool Loader::hasData(String line){
     if(line.isChar(':', (ADDREND + 1), boo) == true) {
 	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
-	    if (line.isChar(' ', DATABEGIN, boo) != true) {
+	    //if (line.isChar(' ', DATABEGIN, boo) != true) {
+	    if(line.isSpaces(DATABEGIN,COMMENT-1,boo) == false) {
 	    while(line.isChar(' ', i, boo) != true) {
 		line.convert2Hex(i,i+1, boo);
 		if(boo) {
@@ -265,7 +266,8 @@ bool Loader::hasData(String line){
 	    	if(line.isChar('|', COMMENT, boo) == true) {
 		    return true;
 		}
-	    }	    	
+	    }
+	    //}	    	
 	}
      }
      return false; 
