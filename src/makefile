@@ -44,7 +44,8 @@ $(OBJD)/W.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $
 
 $(OBJD)/FetchStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/F.h $(INC)/D.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
 
-$(OBJD)/DecodeStage.o: $(INC)/Stage.h $(INC)/Memory.h $(INC)/ConditionCodes.h $(INC)/RegisterFile.h $(INC)/PipeReg.h  $(INC)/DecodeStage.h
+#f d e m w
+$(OBJD)/DecodeStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/D.h $(INC)/E.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
 
 $(OBJD)/ExecuteStage.o: $(INC)/Stage.h  $(INC)/ExecuteStage.h
 
