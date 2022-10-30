@@ -122,40 +122,32 @@ bool Loader::openFile()
 */   
 bool Loader::load()
 {
-   if (!openFile()) return false;
-   String * ptr;
-   std::string line;
-   int lineNumber = 1;  //needed if an error is found
-   int lastAddr = -1;
-   while (getline(inf, line))
-   {
+    if (!openFile()) return false;
+    String * ptr;
+    std::string line;
+    int lineNumber = 1;  //needed if an error is found
+    int lastAddr = -1;
+    while (getline(inf, line))
+    {
       //create a String to contain the std::string
       //Now, all accesses to the input line MUST be via your
       //String class methods
-      String inputLine(line);
+	String inputLine(line);
 	bool boo2;
 	bool boo3;
         ptr = &inputLine;
       //if the line is a data record with errors
       //then print the BADDATA error message and return false
- /*     if(hasAdd(inputiine) == false) {
-	   if(hasData(inputLine) == false) {
-		 printErrMsg(BADDATA, -1, inputFile);
-           }
-*/
 	if(inputLine.isSubString((char *) "0x", 0, boo2)) {
-	    //int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo3);
             if(hasData(inputLine) == false) {
                 return printErrMsg(BADDATA, lineNumber, ptr);
             }        
-
-    //if(true) { // put true here to avoid comp errors - should be inputLine.one of the helper methods
-      //if the line is a comment record with errors
+     //if the line is a comment record with errors
       //then print the BADCOM error message and return false
-    //else
+ 
 	} else {
 	    if (hasComm(inputLine) == false) {
-	    return printErrMsg(BADCOM, lineNumber, ptr);
+		return printErrMsg(BADCOM, lineNumber, ptr);
             }
 	}
 
@@ -186,69 +178,19 @@ bool Loader::load()
       //Don't do all of this work in this method!
       //Break the work up into multiple single purpose methods
       //increment the line number for next iteration
-      lineNumber++;
-   }
-
-   return true;  //load succeeded
+ 	lineNumber++;
+    }
+    return true;  //load succeeded
 }
 
 //add helper methods here and to Loader.h
 
-/*
-
 bool Loader::hasData(String line)
 {
-    if(hasAdd(line)== true) { 
-	int j = DATABEGIN;
-	int data = 0
-	bool boo;
-        //check if the numbers are even 
-	while(line.isSpaces(j, DATAEND, boo) !=  false) {
-	    data = line.convert2Hex(line.get_cstr()[j], line.get_cstr()[j+1], boo);
-	}
-        if(line.get_length()/2) {
-	//check for bytes is not more then 10
-	//check if there is a proper address for it 	
-	return false;
-    } else { 
-	return true;
-    }   
-}
-
-
-bool Loader::hasAdd(String line)
-{
-    bool boo2;
-    std::string need = "0x";
-    int j = ADDRBEGIN
-    uint32_t addr = 0  
-    if(line.isSubString(need, 0, boo2) == true) {
-	while (line.isChar(':', j, boo2) != true) { 
-	    uint32_t addr = line.convert2Hex(line.get_cstr()[j], line.get_cstr()[j+1], boo2);
-	}
-	if(addr == 0x100)
-	{
-	    return false;
-	}	    		
-	return true;
-    } else {
-	return false; 
-    }
-}
-*/
-
-bool Loader::hasAdd(String line)
-{
-    return true; 
-}
-
-bool Loader::hasData(String line){
-
-	bool boo;
+    bool boo;
     if(line.isChar(':', (ADDREND + 1), boo) == true) {
 	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
-	    //if (line.isChar(' ', DATABEGIN, boo) != true) {
 	    if(line.isSpaces(DATABEGIN,COMMENT-1,boo) == false) {
 	    while(line.isChar(' ', i, boo) != true) {
 		line.convert2Hex(i,i+1, boo);
@@ -266,8 +208,7 @@ bool Loader::hasData(String line){
 	    	if(line.isChar('|', COMMENT, boo) == true) {
 		    return true;
 		}
-	    }
-	    //}	    	
+	    }	    	
 	}
      }
      return false; 
@@ -280,7 +221,7 @@ bool Loader::hasComm(String line)
     
     if(line.isSpaces(0,COMMENT-1,boo)) {
 	if(line.isChar('|',COMMENT, boo)) {
-		return true;
+	    return true;
 	}
     } 
    return false;
