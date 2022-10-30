@@ -16,10 +16,11 @@
 
 
 bool WritebackStage::doClockLow(PipeReg ** pregs) {
-	
-} 
+        return false;
+}
 
-void WritebackStage::doClockLow(PipeReg ** pregs) {
+void WritebackStage::doClockHigh(PipeReg ** pregs) {
 
 }
+
 

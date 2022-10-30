@@ -17,10 +17,13 @@
 
 
 bool MemoryStage::doClockLow(PipeReg ** pregs) {
-	
-} 
+        return false;
+}
 
-void MemoryStage::doClockLow(PipeReg ** pregs) {
+void MemoryStage::doClockHigh(PipeReg ** pregs) {
 
 }
+
+
+
 

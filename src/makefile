@@ -45,17 +45,17 @@ $(OBJD)/W.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $
 $(OBJD)/FetchStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/F.h $(INC)/D.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
 
 #f d e m w
-$(OBJD)/DecodeStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/D.h $(INC)/E.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
+$(OBJD)/DecodeStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/D.h $(INC)/E.h  $(INC)/Stage.h  $(INC)/DecodeStage.h  $(INC)/Status.h 
 
-$(OBJD)/ExecuteStage.o: $(INC)/Stage.h  $(INC)/ExecuteStage.h
+$(OBJD)/ExecuteStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/E.h $(INC)/M.h  $(INC)/Stage.h  $(INC)/ExecuteStage.h  $(INC)/Status.h
 
-$(OBJD)/MemoryStage.o: $(INC)/Stage.h  $(INC)/MemoryStage.h
+$(OBJD)/MemoryStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/M.h $(INC)/W.h  $(INC)/Stage.h  $(INC)/MemoryStage.h  $(INC)/Status.h
 
-$(OBJD)/WritebackStage.o: $(INC)/Stage.h $(INC)/WritebackStage.h  
+$(OBJD)/WritebackStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h $(INC)/W.h  $(INC)/Stage.h  $(INC)/WritebackStage.h  $(INC)/Status.h
 
 $(OBJD)/PipeReg.o: $(INC)/PipeRegField.h  $(INC)/PipeReg.h 
 
- ##$(OBJD)/Stage.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h
+$(OBJD)/Stage.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h
 
 
 $(OBJD)/PipeRegField.o:  $(INC)/PipeRegField.h
