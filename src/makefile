@@ -8,7 +8,11 @@ OBJD = ../obj
 CFLAGS = -g -c -Wall -Wno-unused-variable -std=c++11 -I $(INC)
 OBJ = $(OBJD)/Tools.o $(OBJD)/Memory.o $(OBJD)/ConditionCodes.o \
       $(OBJD)/RegisterFile.o $(OBJD)/String.o $(OBJD)/yess.o \
-      $(OBJD)/Loader.o
+      $(OBJD)/Loader.o $(OBJD)/CPU.o $(OBJD)/Stage $(OBJD)/F.o \
+      $(OBJD)/D.o $(OBJD)/E.o $(OBJD)/M.o $(OBJD)/W.o \
+      $(OBJD)/FetchStage.o $(OBJD)/DecodeStage.o $(OBJD)/ExecuteStage.o \
+      $(OBJD)/MemoryStage.o $(OBJD)/WritebackStage.o $(OBJD)/PipeReg.o \
+      $(OBJD)/PipeRegField.o  
 
 #rule to match .C with object in another directory
 $(OBJD)/%.o: %.C 
@@ -26,9 +30,9 @@ $(OBJD)/Loader.o: $(INC)/Loader.h $(INC)/Memory.h $(INC)/String.h
 
 $(OBJD)/yess.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h $(INC)/CPU.h
 
-$(OBJD)/CPU.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField $(INC)/F.h $(INC)/D.h $(INC)/E.h $(INC)/M.h $(INC)/W.h $(INC)/Stage.h $(INC)/MemoryStage.h $(INC)/ExecuteStage.h $(INC)/DecodeStage.h $(INC)/FetchStage.h $(INC)/WritebackStage.h $(INC)/CPU.h
+$(OBJD)/CPU.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/F.h $(INC)/D.h $(INC)/E.h $(INC)/M.h $(INC)/W.h $(INC)/Stage.h $(INC)/MemoryStage.h $(INC)/ExecuteStage.h $(INC)/DecodeStage.h $(INC)/FetchStage.h $(INC)/WritebackStage.h $(INC)/CPU.h
 
-$(OBJD)/Stage.o: $(INC)/PipeRegField $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/Stage.h
+$(OBJD)/Stage.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h
 
 $(OBJD)/F.o: $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/F.h
 
