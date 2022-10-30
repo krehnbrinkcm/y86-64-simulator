@@ -173,7 +173,7 @@ bool Loader::load()
 	int j = DATABEGIN;
 	while(inputLine.isChar(' ', j, boo2) != true) {
 	    int8_t byte = inputLine.convert2Hex(j,j+1, boo2);
-	    if (addr <= lastAddr || addr >= MEMSIZE) {
+	    if (addr <= lastAddr || addr+8 >= MEMSIZE) {
 		return printErrMsg(BADDATA,lineNumber,ptr);
 	    }
 	    mem->putByte(byte, addr, boo2);
@@ -242,10 +242,9 @@ bool Loader::hasAdd(String line)
     return true; 
 }
 
-bool Loader::hasData(String line)
-{
-    bool boo;
-    
+bool Loader::hasData(String line){
+
+	bool boo;
     if(line.isChar(':', (ADDREND + 1), boo) == true) {
 	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
