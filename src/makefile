@@ -24,7 +24,42 @@ $(OBJD)/String.o: $(INC)/String.h
 
 $(OBJD)/Loader.o: $(INC)/Loader.h $(INC)/Memory.h $(INC)/String.h
 
-$(OBJD)/yess.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h
+$(OBJD)/yess.o: $(INC)/Memory.h $(INC)/String.h $(INC)/Loader.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/Stage.h $(INC)/CPU.h
+
+$(OBJD)/CPU.o: $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/PipeRegField $(INC)/F.h $(INC)/D.h $(INC)/E.h $(INC)/M.h $(INC)/W.h $(INC)/Stage.h $(INC)/MemoryStage.h $(INC)/ExecuteStage.h $(INC)/DecodeStage.h $(INC)/FetchStage.h $(INC)/WritebackStage.h $(INC)/CPU.h
+
+$(OBJD)/Stage.o: $(INC)/PipeRegField $(INC)/Memory.h $(INC)/RegisterFile.h $(INC)/ConditionCodes.h $(INC)/Stage.h
+
+$(OBJD)/F.o: $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/F.h
+
+$(OBJD)/D.o: $(INC)/Instructions.h $(INC)/RegisterFile.h $(INC)/PipeReg.h $(INC)/D.h $(INC)/Status.h
+
+$(OBJD)/E.o: $(INC)/RegisterField.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/E.h $(INC)/Status.h
+
+$(OBJD)/M.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/M.h $(INC)/Status.h
+
+$(OBJD)/W.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/W.h $(INC)/Status.h
+
+$(OBJD)/FetchStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/F.h $(INC)/D.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
+
+$(OBJD)/DecodeStage.o: $(INC)/Stage.h  $(INC)/DecodeStage.h
+
+$(OBJD)/ExecuteStage.o: $(INC)/Stage.h  $(INC)/ExecuteStage.h
+
+$(OBJD)/MemoryStage.o: $(INC)/Stage.h  $(INC)/MemoryStage.h
+
+$(OBJD)/WritebackStage.o: $(INC)/Stage.h $(INC)/WritebackStage.h  
+
+$(OBJD)/PipeReg.o: $(INC)/PipeRegField.h  $(INC)/PipeReg.h 
+
+$(OBJD)/PipeRegField.o:  $(INC)/PipeRegField.h
+
+
+
+
+
+
+
 
 
 #2) Need a ../bin/yess target that links together the .o files
