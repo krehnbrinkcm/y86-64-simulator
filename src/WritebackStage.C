@@ -23,7 +23,12 @@ bool WritebackStage::doClockLow(PipeReg ** pregs) {
     uint64_t valm = wreg->get(W_VALM);
     uint64_t dste = wreg->get(W_DSTE);
     uint64_t dstm = wreg->get(W_DSTM);
-        return true;
+
+    if (icode == IHALT) {
+	return true;
+    }
+
+        return false;
 }
 
 void WritebackStage::doClockHigh(PipeReg ** pregs) {
