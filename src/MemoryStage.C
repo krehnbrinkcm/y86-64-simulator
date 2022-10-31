@@ -17,13 +17,40 @@
 
 
 bool MemoryStage::doClockLow(PipeReg ** pregs) {
+	PipeReg * mreg = pregs[MREG];
+	PipeReg * wreg = pregs[WREG];
+
+	bool mem_error = false;
+
+	uint64_t stat = mreg->get(M_STAT);
+	uint64_t icode = mreg->get(M_ICODE);
+	uint64_t cnd = mreg->get(M_CND);
+	uint64_t vale = mreg->get(M_VALE);
+	uint64_t vala = mreg->get(M_VALA);
+	uint64_t dste = mreg->get(M_DSTE);
+	uint64_t dstm = mreg->get(M_DSTM);
+
+	uint64_t valm = 0;
+
+	setWInput(wreg, stat, icode, vale, valm, dste, dstm);
         return false;
 }
 
 void MemoryStage::doClockHigh(PipeReg ** pregs) {
-
+	PipeReg * mreg = pregs[MREG];
+	mreg->normal();
 }
 
 
+void MemoryStage::setWInput(PipeReg * wreg, uint64_t w_stat, uint64_t w_icode, uint64_t w_vale, uint64_t w_valm, uint64_t w_dste, uint64_t w_dstm) {
+	wreg->set(W_STAT, w_stat);
+	wreg->set(W_ICODE, w_icode);
+	wreg->set(W_VALE, w_vale);
+	wreg->set(W_VALM, w_valm);
+	wreg->set(W_DSTE, w_dste);
+	wreg->set(W_DSTM, w_dstm);
+
+
+}
 
 
