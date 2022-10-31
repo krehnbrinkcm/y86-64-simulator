@@ -16,7 +16,14 @@
 
 
 bool WritebackStage::doClockLow(PipeReg ** pregs) {
-        return false;
+    PipeReg * wreg = pregs[WREG];
+    uint64_t stat = wreg->get(W_STAT);
+    uint64_t icode = wreg->get(W_ICODE);
+    uint64_t vale = wreg->get(W_VALE);
+    uint64_t valm = wreg->get(W_VALM);
+    uint64_t dste = wreg->get(W_DSTE);
+    uint64_t dstm = wreg->get(W_DSTM);
+        return true;
 }
 
 void WritebackStage::doClockHigh(PipeReg ** pregs) {
