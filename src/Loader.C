@@ -150,18 +150,9 @@ bool Loader::load()
 		return printErrMsg(BADCOM, lineNumber, ptr);
             }
 	}
-
-	
-
-
       //Otherwise, load any data on the line into
       //memory
-      //
-
 	int addr = inputLine.convert2Hex(ADDRBEGIN, ADDREND, boo2);
-        
-	
-
 	int j = DATABEGIN;
 	while(inputLine.isChar(' ', j, boo2) != true) {
 	    int8_t byte = inputLine.convert2Hex(j,j+1, boo2);
@@ -172,9 +163,7 @@ bool Loader::load()
 	    lastAddr = addr;
 	    addr++;
 	    j+= 2;
-	}
-
-	
+	}	
       //Don't do all of this work in this method!
       //Break the work up into multiple single purpose methods
       //increment the line number for next iteration
@@ -192,17 +181,17 @@ bool Loader::hasData(String line)
 	if(line.isChar(' ', (DATABEGIN-1), boo) == true) {
 	    int i = DATABEGIN;
 	    if(line.isSpaces(DATABEGIN,COMMENT-1,boo) == false) {
-	    while(line.isChar(' ', i, boo) != true) {
-		line.convert2Hex(i,i+1, boo);
-		if(boo) {
-		  return false;
-		} 
-		i += 2;
-	    }
-            for (int j = i+1; j < COMMENT; j++ ) {
-		if (line.isChar(' ', j, boo) != true)
+	    	while(line.isChar(' ', i, boo) != true) {
+		    line.convert2Hex(i,i+1, boo);
+		    if(boo) {
+		  	return false;
+		    } 
+		    i += 2;
+	    	}
+            	for (int j = i+1; j < COMMENT; j++ ) {
+		    if (line.isChar(' ', j, boo) != true)
 			return false;
-	    }
+	    	}
 	    }
             if(line.isChar(' ', (COMMENT - 1), boo) == true) { 
 	    	if(line.isChar('|', COMMENT, boo) == true) {
