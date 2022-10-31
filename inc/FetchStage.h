@@ -6,7 +6,9 @@ class FetchStage: public Stage
       //TODO: provide declarations for new methods
 	uint64_t selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg);
 	bool needRegIds(uint64_t f_icode);
-        bool needValc(uint64_t f_icode);
+        bool needValC(uint64_t f_icode);
+	uint64_t predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp);
+	uint64_t PCincrement(uint64_t f_pc, bool needRegId, bool needValC);
       //set the input value for each fieldof the D pipeline register
       void setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode, 
                      uint64_t ifun, uint64_t rA, uint64_t rB,

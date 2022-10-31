@@ -29,6 +29,8 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
 {
    PipeReg * freg = pregs[FREG];  //pointer to object representing F pipeline register
    PipeReg * dreg = pregs[DREG];  //pointer to object representing D pipeline register
+   PipeReg * mreg = pregs[MREG];
+   PipeReg * wreg = pregs[WREG];
    bool mem_error = false;
    uint64_t icode = INOP, ifun = FNONE, rA = RNONE, rB = RNONE;
    uint64_t valC = 0, valP = 0, stat = 0, predPC = 0;
@@ -38,8 +40,8 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    //TODO 
    //select PC value and read byte from memory
    //set icode and ifun using byte read from memory
-   //uint64_t f_pc =  .... call your select pc function
-
+   uint64_t f_pc = selectPC(freg, mreg, wreg);
+	
    //status of this instruction is SAOK (this will change in a later lab)
    stat = SAOK;
 
@@ -47,16 +49,16 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    //In order to calculate the address of the next instruction,
    //you'll need to know whether this current instruction has an
    //immediate field and a register byte. (Look at the instruction encodings.)
-   //needvalC =  .... call your need valC function
-   //needregId = .... call your need regId function
+   needvalC = needValC(icode);
+   needregId = needRegIds(icode);
 
    //TODO
    //determine the address of the next sequential function
-   //valP = ..... call your PC increment function 
+   valP = PCincrement(f_pc, needvalC, needregId);
 
    //TODO
    //calculate the predicted PC value
-   //predPC = .... call your function that predicts the next PC   
+   predPC = predictPC(icode, valC, valP);
 
    //set the input for the PREDPC pipe register field in the F register
    freg->set(F_PREDPC, predPC);
@@ -155,7 +157,7 @@ bool FetchStage::needRegIds(uint64_t f_icode)
      }
 }
 
-bool FetchStage::needValc(uint64_t f_icode)
+bool FetchStage::needValC(uint64_t f_icode)
 {
     if(f_icode == IIRMOVQ || f_icode == IRMMOVQ || f_icode == IMRMOVQ || f_icode == IJXX || f_icode == ICALL){
 	return true;
@@ -163,17 +165,21 @@ bool FetchStage::needValc(uint64_t f_icode)
     return false;
 }
 
+uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp) {
+	if (f_icode == IJXX || f_icode == ICALL) {
+		return f_valc;
+	}
+	return f_valp;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-     
+uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegIds, bool needValC) {
+	if (needValC) {
+		f_pc += 8;
+	}
+	if (needRegIds)
+	{
+		f_pc += 1;
+	}
+	f_pc += 1;
+	return f_pc;	
+}     
