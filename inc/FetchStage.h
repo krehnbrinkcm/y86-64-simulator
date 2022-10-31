@@ -4,7 +4,7 @@ class FetchStage: public Stage
 {
    private:
       //TODO: provide declarations for new methods
-
+	uint64_t selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg);
       //set the input value for each fieldof the D pipeline register
       void setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode, 
                      uint64_t ifun, uint64_t rA, uint64_t rB,

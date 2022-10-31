@@ -10,6 +10,8 @@
 #include "PipeReg.h"
 #include "F.h"
 #include "D.h"
+#include "M.h"
+#include "W.h"
 #include "Stage.h"
 #include "FetchStage.h"
 #include "Status.h"
@@ -117,7 +119,7 @@ word f_pc = [
     M_icode == IJXX && !M_Cnd : M_valA;
     W_icode == IRET : W_valM;
     1: F_predPC;
-];
+]
 
 //needRegIds  method: input is f_icode
 bool need_regids = f_icode in { IRRMOVQ, IOPQ, IPUSHQ, IPOPQ, IIRMOVQ, IRMMOVQ, IMRMOVQ };
@@ -130,7 +132,21 @@ word f_predPC = [
     f_icode in { IJXX, ICALL } : f_valC;
     1: f_valP;
 ];
-
 */
+
+uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg) {
+	if (mreg->get(M_ICODE) == (IJXX && !(mreg->get(M_CND)))) {
+		return (mreg->get(M_VALA));
+	}
+	else if (wreg->get(W_ICODE) == IRET) {
+		return (wreg->get(W_VALM));
+	}
+	else {
+		return (freg->get(F_PREDPC));
+	}
+}
+
+
+
 
      
