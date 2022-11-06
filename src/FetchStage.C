@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdint>
 #include <stdio.h>
+#include "Tools.h"
 #include "Memory.h"
 #include "ConditionCodes.h"
 #include "Instructions.h"
@@ -41,7 +42,10 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    //select PC value and read byte from memory
    //set icode and ifun using byte read from memory
    uint64_t f_pc = selectPC(freg, mreg, wreg);
-	
+   uint64_t byte = mem->getByte(f_pc, mem_error);
+   icode = Tools::getBits(byte, 4, 7);
+   ifun = Tools::getBits(byte, 0, 3);
+//getByte	
    //status of this instruction is SAOK (this will change in a later lab)
    stat = SAOK;
 
@@ -137,7 +141,7 @@ word f_predPC = [
 */
 
 uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg) {
-	if (mreg->get(M_ICODE) == (IJXX && !(mreg->get(M_CND)))) {
+	if ((mreg->get(M_ICODE) == IJXX) && (!(mreg->get(M_CND)))) {
 		return (mreg->get(M_VALA));
 	}
 	else if (wreg->get(W_ICODE) == IRET) {
@@ -155,6 +159,7 @@ bool FetchStage::needRegIds(uint64_t f_icode)
      } else {
 	return false;
      }
+     return false;
 }
 
 bool FetchStage::needValC(uint64_t f_icode)
@@ -175,11 +180,10 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_val
 uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegIds, bool needValC) {
 	if (needValC) {
 		f_pc += 8;
-	}
-	if (needRegIds)
-	{
-		f_pc += 1;
-	}
+		if (needRegIds) {
+	            f_pc += 1;
+	 	}
+	} 
 	f_pc += 1;
-	return f_pc;	
+        return f_pc;	
 }     

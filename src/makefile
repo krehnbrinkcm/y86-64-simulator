@@ -42,7 +42,7 @@ $(OBJD)/M.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $
 
 $(OBJD)/W.o: $(INC)/RegisterFile.h $(INC)/Instructions.h $(INC)/PipeRegField.h $(INC)/PipeReg.h $(INC)/W.h $(INC)/Status.h
 
-$(OBJD)/FetchStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/F.h $(INC)/D.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
+$(OBJD)/FetchStage.o: $(INC)/Tools.h $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/F.h $(INC)/D.h  $(INC)/Stage.h  $(INC)/FetchStage.h  $(INC)/Status.h 
 
 #f d e m w
 $(OBJD)/DecodeStage.o: $(INC)/Memory.h  $(INC)/ConditionCodes.h  $(INC)/Instructions.h  $(INC)/RegisterFile.h  $(INC)/PipeRegField.h  $(INC)/PipeReg.h  $(INC)/D.h $(INC)/E.h  $(INC)/Stage.h  $(INC)/DecodeStage.h  $(INC)/Status.h 
