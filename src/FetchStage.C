@@ -56,6 +56,10 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    needvalC = needValC(icode);
    needregId = needRegIds(icode);
 
+   if(needregId)
+   {
+	getRegIds(byte, rA, rB);
+   }
    //TODO
    //determine the address of the next sequential function
    valP = PCincrement(f_pc, needvalC, needregId);
@@ -161,6 +165,12 @@ bool FetchStage::needRegIds(uint64_t f_icode)
      return false;
 }
 
+void FetchStage::getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB)
+{
+    rA = Tools::getBits(byte, 8, 11);
+    rB = Tools::getBits(byte, 12, 15);			
+} 
+
 bool FetchStage::needValC(uint64_t f_icode)
 {
     if(f_icode == IIRMOVQ || f_icode == IRMMOVQ || f_icode == IMRMOVQ || f_icode == IJXX || f_icode == ICALL){
@@ -168,6 +178,14 @@ bool FetchStage::needValC(uint64_t f_icode)
     }
     return false;
 }
+
+/*
+ * I honestly dont know how to dothis part
+uint64_t FetchStage::buildValC(uint64_t valC)
+{
+}
+*/
+
 
 uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp) {
 	if (f_icode == IJXX || f_icode == ICALL) {
