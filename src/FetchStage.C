@@ -153,11 +153,10 @@ uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg) {
 }
 
 bool FetchStage::needRegIds(uint64_t f_icode)
-{	
+{
+	
      if(f_icode == IRRMOVQ || f_icode == IOPQ || f_icode == IPUSHQ || f_icode == IPOPQ || f_icode == IIRMOVQ || f_icode == IRMMOVQ || f_icode == IMRMOVQ) {
 	return true;
-     } else {
-	return false;
      }
      return false;
 }
