@@ -60,6 +60,12 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    {
 	getRegIds(byte, rA, rB);
    }
+/*
+   if(needvalC)
+   {
+	valc = buildValC(byte, icode, valc);
+   }
+*/ 
    //TODO
    //determine the address of the next sequential function
    valP = PCincrement(f_pc, needvalC, needregId);
@@ -125,7 +131,7 @@ void FetchStage::setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode,
 /*
 
 //selectPC method: input is F, M, and W registers
-word f_pc = [
+w`ord f_pc = [
     M_icode == IJXX && !M_Cnd : M_valA;
     W_icode == IRET : W_valM;
     1: F_predPC;
@@ -181,8 +187,17 @@ bool FetchStage::needValC(uint64_t f_icode)
 
 /*
  * I honestly dont know how to dothis part
-uint64_t FetchStage::buildValC(uint64_t valC)
+
+uint64_t FetchStage::buildValC(uint64_t byte, uint64_t icode, uint64_t valc)
 {
+
+    for(i
+    if(needRegIds(icode))
+    {
+	return valc = buildLong(byte);
+    }
+    return valc = buildLong(byte);
+
 }
 */
 

@@ -31,8 +31,12 @@ bool WritebackStage::doClockLow(PipeReg ** pregs) {
         return false;
 }
 
-void WritebackStage::doClockHigh(PipeReg ** pregs) {
+void WritebackStage::doClockHigh(PipeReg ** wreg) {
 
+   bool error;
+   //needs to be fixed 
+   //PipeReg * wreg = pregs[WREG];
+   //rf -> writeRegister(wreg->get(W_DSTE), wreg->get(W_VALM), error); 
 }
 
 
