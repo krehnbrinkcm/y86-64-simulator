@@ -31,7 +31,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t srcb = ereg->get(E_SRCB);
     
     uint64_t cnd = 0;
-    uint64_t vale = 0;
+    uint64_t vale = ereg->get(E_VALC);
 
 
     setMInput(mreg, stat, icode, cnd, vale, vala, dste, dstm); 

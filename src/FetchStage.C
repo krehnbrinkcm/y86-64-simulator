@@ -60,12 +60,12 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    {
 	getRegIds(byte, rA, rB);
    }
-/*
+
    if(needvalC)
    {
-	valc = buildValC(byte, icode, valc);
+	valC = buildValC(byte, icode, valC);
    }
-*/ 
+ 
    //TODO
    //determine the address of the next sequential function
    valP = PCincrement(f_pc, needvalC, needregId);
@@ -185,22 +185,20 @@ bool FetchStage::needValC(uint64_t f_icode)
     return false;
 }
 
-
- /* I honestly dont know how to dothis part
-
 uint64_t FetchStage::buildValC(uint64_t byte, uint64_t icode, uint64_t valc)
 {
-
-    for(i
-    if(needRegIds(icode))
+    if(needValC(icode))
     {
-	return valc = buildLong(byte);
+	bool err = false;
+	uint64_t valc = 0;
+	for (int i = 7; i >= 0; i--) {
+		valc += mem->getByte(byte+i,err);
+		valc = valc >> 8;
+	}
+	return valc;			
     }
-    return valc = buildLong(byte);
-
+        return 0;
 }
-*/
-
 
 
 uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp) {

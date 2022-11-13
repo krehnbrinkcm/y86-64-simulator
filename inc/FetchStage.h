@@ -8,6 +8,7 @@ class FetchStage: public Stage
 	bool needRegIds(uint64_t f_icode);
 	void getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB);
         bool needValC(uint64_t f_icode);
+	uint64_t buildValC(uint64_t byte, uint64_t icode, uint64_t valc);
 	uint64_t predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp);
 	uint64_t PCincrement(uint64_t f_pc, bool needRegId, bool needValC);
       //set the input value for each fieldof the D pipeline register

@@ -36,6 +36,7 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	uint64_t srcb = getDsrcB(icode, rb);
 	uint64_t vala = getSelFwdA(icode, srca);
         uint64_t valb = getFwdB(icode, srcb);
+
         
 	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, srca, srcb);	
 	return false;

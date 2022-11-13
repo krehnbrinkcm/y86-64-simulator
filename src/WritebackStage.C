@@ -17,13 +17,13 @@
 
 bool WritebackStage::doClockLow(PipeReg ** pregs) {
     PipeReg * wreg = pregs[WREG];
-  //  uint64_t stat = wreg->get(W_STAT);
+    uint64_t stat = wreg->get(W_STAT);
     uint64_t icode = wreg->get(W_ICODE);
-    /*uint64_t vale = wreg->get(W_VALE);
+    uint64_t vale = wreg->get(W_VALE);
     uint64_t valm = wreg->get(W_VALM);
     uint64_t dste = wreg->get(W_DSTE);
     uint64_t dstm = wreg->get(W_DSTM);
-*/
+
     if (icode == IHALT) {
 	return true;
     }
@@ -31,12 +31,12 @@ bool WritebackStage::doClockLow(PipeReg ** pregs) {
         return false;
 }
 
-void WritebackStage::doClockHigh(PipeReg ** wreg) {
+void WritebackStage::doClockHigh(PipeReg ** pregs) {
 
    bool error;
    //needs to be fixed 
    PipeReg * wreg = pregs[WREG];
-   writeRegister(wreg->get(W_VALE), wreg->get(W_DSTE),error);
+   rf->writeRegister(wreg->get(W_VALE), wreg->get(W_DSTE),error);
 
    //rf -> writeRegister(wreg->get(W_DSTE), wreg->get(W_VALM), error); 
 }
