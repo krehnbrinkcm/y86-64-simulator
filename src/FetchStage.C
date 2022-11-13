@@ -185,8 +185,8 @@ bool FetchStage::needValC(uint64_t f_icode)
     return false;
 }
 
-/*
- * I honestly dont know how to dothis part
+
+ /* I honestly dont know how to dothis part
 
 uint64_t FetchStage::buildValC(uint64_t byte, uint64_t icode, uint64_t valc)
 {
@@ -200,6 +200,7 @@ uint64_t FetchStage::buildValC(uint64_t byte, uint64_t icode, uint64_t valc)
 
 }
 */
+
 
 
 uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp) {

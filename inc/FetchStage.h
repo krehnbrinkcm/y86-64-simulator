@@ -6,7 +6,7 @@ class FetchStage: public Stage
       //TODO: provide declarations for new methods
 	uint64_t selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg);
 	bool needRegIds(uint64_t f_icode);
-	void getRegIds(uint64_t byte, uint64_t rA, uint64_t rB);
+	void getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB);
         bool needValC(uint64_t f_icode);
 	uint64_t predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp);
 	uint64_t PCincrement(uint64_t f_pc, bool needRegId, bool needValC);
