@@ -170,8 +170,8 @@ bool FetchStage::needRegIds(uint64_t f_icode)
 
 void FetchStage::getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB)
 {
-    rA = Tools::getBits(byte, 8, 11);
-    rB = Tools::getBits(byte, 12, 15);			
+    rA = Tools::getBits(byte, 4, 7);
+    rB = Tools::getBits(byte, 0, 3);			
 } 
 
 bool FetchStage::needValC(uint64_t f_icode)
