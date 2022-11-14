@@ -88,6 +88,7 @@ $(OBJD)/ConditionCodes.o: $(INC)/ConditionCodes.h $(INC)/Tools.h
 
 clean:
 	rm -f $(OBJ)
+	rm -f $(BIN)/yess
 
 run:
 	make $(BIN)/yess

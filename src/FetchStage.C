@@ -185,14 +185,14 @@ bool FetchStage::needValC(uint64_t f_icode)
 uint64_t FetchStage::buildValC(int64_t f_pc, uint64_t icode) {
     uint8_t byte[LONGSIZE];
     bool error;
+    f_pc++;
     if (needRegIds(icode))
     {
         f_pc++;
     }
     for(int i = 0; i < 8; i++)
     {
-        byte[i] = mem -> getByte(f_pc, error);
-        f_pc++;
+        byte[i] = mem -> getByte(f_pc + i, error);
     }
     return Tools::buildLong(byte);
 }
