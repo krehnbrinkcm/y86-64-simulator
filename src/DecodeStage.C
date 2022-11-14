@@ -34,8 +34,8 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	uint64_t dstm = getDstM(icode, ra);
 	uint64_t srca = getDsrcA(icode, ra);
 	uint64_t srcb = getDsrcB(icode, rb);
-	uint64_t vala = getSelFwdA(icode, srca);
-        uint64_t valb = getFwdB(icode, srcb);
+	uint64_t vala = getSelFwdA(srca);
+        uint64_t valb = getFwdB(srcb);
 
         
 	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, srca, srcb);	
@@ -88,17 +88,17 @@ uint64_t DecodeStage::getDstM(uint64_t d_icode, uint64_t d_rA)
     return RNONE;
 }
 
-uint64_t DecodeStage::getSelFwdA(uint64_t d_rvalA, uint64_t d_srcA)
+uint64_t DecodeStage::getSelFwdA(uint64_t d_srcA)
 {
     bool error;
-    d_rvalA = rf->readRegister(d_srcA, error);
+    uint64_t d_rvalA = rf->readRegister(d_srcA, error);
     return d_rvalA; 
 }
 
-uint64_t DecodeStage::getFwdB(uint64_t d_rvalB, uint64_t d_srcB)
+uint64_t DecodeStage::getFwdB(uint64_t d_srcB)
 {
     bool error;
-    d_rvalB = rf->readRegister(d_srcB, error);
+    uint64_t d_rvalB = rf->readRegister(d_srcB, error);
     return d_rvalB;
 }
 

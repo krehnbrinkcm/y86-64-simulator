@@ -56,14 +56,11 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    needvalC = needValC(icode);
    needregId = needRegIds(icode);
 
-   if(needregId)
-   {
+   if(needregId) {
 	getRegIds(byte, rA, rB);
-   }
-
-   if(needvalC)
-   {
-	valC = buildValC(f_pc, icode);
+        if(needvalC) {
+	    valC = buildValC(f_pc, icode);
+	}
    }
  
    //TODO
@@ -192,7 +189,7 @@ uint64_t FetchStage::buildValC(int64_t f_pc, uint64_t icode) {
     {
         f_pc++;
     }
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < 4; i++)
     {
         byte[i] = mem -> getByte(f_pc, error);
         f_pc++;
