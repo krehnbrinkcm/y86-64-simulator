@@ -33,6 +33,8 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t cnd = 0;
     uint64_t vale = ereg->get(E_VALC);
 
+    
+
 
     setMInput(mreg, stat, icode, cnd, vale, vala, dste, dstm); 
     return false;
@@ -106,3 +108,59 @@ uint64_t ExecuteStage::getDstE(uint64_t e_icode, uint64_t e_cnd, uint64_t e_dste
 	else 
 		return e_dste;
 }
+
+void ExecuteStage::CC(uint64_t num, uint64_t A, uint64_t B) {
+	bool error = false;
+	if (num == 0) {
+		cc->setConditionCode(1,ZF,error);
+	}
+	else {
+		 cc->setConditionCode(0,ZF,error);
+	}
+	if (num < 0) {
+		 cc->setConditionCode(1,SF,error);
+	}
+	else {
+		cc->setConditionCode(0,SF,error);
+	}
+	if (A >= 0 && B >= 0 && num < 0 ) {
+		cc->setConditionCode(1,OF,error);
+	}
+	else if (A < 0 && B < 0 && num > 0) {
+		cc->setConditionCode(1,OF,error);
+	}
+	else {
+		cc->setConditionCode(0,OF,error);
+	}
+
+}
+
+uint64_t ExecuteStage::ALU(uint64_t e_icode, uint64_t e_ifun, uint64_t e_valA, uint64_t e_valB, uint64_t e_valC) {
+	uint64_t fun = getAluFun(e_icode, e_ifun);
+	if (fun == ADDQ) {
+		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) + getAluB(e_icode,e_valB);
+		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+		return rtn;		
+	}
+	else if (fun == SUBQ) {
+		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) - getAluB(e_icode,e_valB);
+		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+                return rtn;
+	}
+	else if (fun == XORQ) {
+		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) ^ getAluB(e_icode,e_valB);
+		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+                return rtn;
+	}
+	else if (fun == ANDQ) {
+		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) & getAluB(e_icode,e_valB); 
+		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+                return rtn;	
+	}
+	else 
+		return 0;
+}
+
+
+
+
