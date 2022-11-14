@@ -63,7 +63,7 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
 
    if(needvalC)
    {
-	valC = buildValC(byte, icode, valC);
+	valC = buildValC(f_pc, icode);
    }
  
    //TODO
@@ -185,21 +185,20 @@ bool FetchStage::needValC(uint64_t f_icode)
     return false;
 }
 
-uint64_t FetchStage::buildValC(uint64_t byte, uint64_t icode, uint64_t valc)
-{
-    if(needValC(icode))
+uint64_t FetchStage::buildValC(int64_t f_pc, uint64_t icode) {
+    uint8_t byte[LONGSIZE];
+    bool error;
+    if (needRegIds(icode))
     {
-	bool err = false;
-	uint64_t valc = 0;
-	for (int i = 7; i >= 0; i--) {
-		valc += mem->getByte(byte+i,err);
-		valc = valc >> 8;
-	}
-	return valc;			
+        f_pc++;
     }
-        return 0;
+    for(int i = 0; i < 8; i++)
+    {
+        byte[i] = mem -> getByte(f_pc, error);
+        f_pc++;
+    }
+    return Tools::buildLong(byte);
 }
-
 
 uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp) {
 	if (f_icode == IJXX || f_icode == ICALL) {
