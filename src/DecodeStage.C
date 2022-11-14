@@ -9,6 +9,8 @@
 #include "PipeReg.h"
 #include "D.h"
 #include "E.h"
+#include "M.h"
+#include "W.h"
 #include "Stage.h"
 #include "DecodeStage.h"
 #include "Status.h"
@@ -19,6 +21,9 @@
 bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	PipeReg * dreg = pregs[DREG];
 	PipeReg * ereg = pregs[EREG];
+	PipeReg * wreg = pregs[WREG];
+	PipeReg * mreg = pregs[MREG];
+
 
 	bool mem_error = false;
 
@@ -34,8 +39,8 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	uint64_t dstm = getDstM(icode, ra);
 	uint64_t srca = getDsrcA(icode, ra);
 	uint64_t srcb = getDsrcB(icode, rb);
-	uint64_t vala = getSelFwdA(srca);
-        uint64_t valb = getFwdB(srcb);
+	uint64_t vala = getSelFwdA(mreg, wreg,srca);
+        uint64_t valb = getFwdB(mreg, wreg, srcb);
 
         
 	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, srca, srcb);	
@@ -88,19 +93,38 @@ uint64_t DecodeStage::getDstM(uint64_t d_icode, uint64_t d_rA)
     return RNONE;
 }
 
-uint64_t DecodeStage::getSelFwdA(uint64_t d_srcA)
+uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcA)
 {
     bool error;
-    uint64_t d_rvalA = rf->readRegister(d_srcA, error);
-    return d_rvalA; 
+    uint64_t d_rvalA = 0;
+    if(d_srcA == e_dstE){
+	return e_valE;
+    } else if (d_srcA == (mreg -> get(M_DSTE))) {
+	return mreg -> get(M_VALE);
+    } else if (d_srcA == (wreg -> get(W_DSTE))) { 
+	return wreg -> get(W_VALE);
+    } else {
+	d_rvalA = rf->readRegister(d_srcA, error);
+    	return d_rvalA; 
+    }
 }
 
-uint64_t DecodeStage::getFwdB(uint64_t d_srcB)
+uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcB)
 {
     bool error;
-    uint64_t d_rvalB = rf->readRegister(d_srcB, error);
-    return d_rvalB;
+    uint64_t d_rvalB = 0;
+    if(d_srcB == e_dstE){
+        return e_valE;
+    } else if (d_srcB == (mreg -> get(M_DSTE))) {
+	return mreg -> get(M_VALE);
+    } else if (d_srcB == (wreg -> get(W_DSTE))) { 
+        return wreg -> get(W_VALE);
+    } else {
+        d_rvalB = rf->readRegister(d_srcB, error);
+        return d_rvalB;
+    }
 }
+
 
 void DecodeStage::setEInput(PipeReg * ereg, uint64_t e_stat, uint64_t e_icode, uint64_t e_ifun, uint64_t e_valc, uint64_t e_vala, uint64_t e_valb, uint64_t e_dste, uint64_t e_dstm, uint64_t e_srca, uint64_t e_srcb) {
 	ereg->set(E_STAT, e_stat);
