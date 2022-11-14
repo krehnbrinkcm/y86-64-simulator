@@ -59,3 +59,50 @@ void ExecuteStage::setMInput(PipeReg * mreg, uint64_t m_stat, uint64_t m_icode, 
     mreg->set(M_DSTM, m_dstm); 
 }
 
+uint64_t ExecuteStage::getAluA(uint64_t e_icode,uint64_t e_valA,uint64_t e_valC) {
+	if (e_icode == IRRMOVQ || e_icode == IOPQ) {
+		return e_valA;
+	}
+	else if (e_icode == IIRMOVQ || e_icode == IRMMOVQ || e_icode == IMRMOVQ) {
+		return e_valC;
+	}
+	else if (e_icode == ICALL || e_icode == IPUSHQ) {
+		return -8;
+	}
+	else if (e_icode == IRET || e_icode == IPOPQ) {
+		return 8;
+	}
+	else
+		return 0;	
+}
+
+uint64_t ExecuteStage::getAluB(uint64_t e_icode,uint64_t e_valB) {
+        if (e_icode == IRMMOVQ || e_icode == IMRMOVQ || e_icode == IOPQ || e_icode == ICALL || e_icode == IPUSHQ || e_icode == IRET || e_icode == IPOPQ) {
+                return e_valB;
+        }
+        else if (e_icode == IRRMOVQ || e_icode == IIRMOVQ) {
+                return 0;
+        }
+        else
+                return 0;
+}
+
+uint64_t ExecuteStage::getAluFun(uint64_t e_icode, uint64_t e_ifun) {
+	if (e_icode == IOPQ) {
+		return e_ifun;
+	}
+	else 
+		return ADDQ;
+}
+
+bool ExecuteStage::set_cc(uint64_t e_icode) {
+	return e_icode == IOPQ;
+}
+
+uint64_t ExecuteStage::getDstE(uint64_t e_icode, uint64_t e_cnd, uint64_t e_dste) {
+	if (e_icode == IRRMOVQ && !e_cnd) {
+		return RNONE;
+	}
+	else 
+		return e_dste;
+}
