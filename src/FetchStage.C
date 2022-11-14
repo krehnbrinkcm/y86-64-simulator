@@ -55,12 +55,12 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    //immediate field and a register byte. (Look at the instruction encodings.)
    needvalC = needValC(icode);
    needregId = needRegIds(icode);
-
+     
    if(needregId) {
-	getRegIds(byte, rA, rB);
-        if(needvalC) {
-	    valC = buildValC(f_pc, icode);
-	}
+	getRegIds(mem->getByte((f_pc+1), mem_error), rA, rB);
+   }     
+   if(needvalC) {
+       valC = buildValC(f_pc, icode);
    }
  
    //TODO
@@ -189,7 +189,7 @@ uint64_t FetchStage::buildValC(int64_t f_pc, uint64_t icode) {
     {
         f_pc++;
     }
-    for(int i = 0; i < 4; i++)
+    for(int i = 0; i < 8; i++)
     {
         byte[i] = mem -> getByte(f_pc, error);
         f_pc++;
