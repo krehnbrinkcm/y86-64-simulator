@@ -5,3 +5,5 @@ bin/yess
 tst/*.yo
 tst/*.sdump
 tst/*.idump
+bin/iyas
+bin/iyessl8
