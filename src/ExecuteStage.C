@@ -13,6 +13,7 @@
 #include "ExecuteStage.h"
 #include "Status.h"
 #include "Debug.h"
+#include "Tools.h"
 
 bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     PipeReg * ereg = pregs[EREG];
@@ -31,7 +32,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t srcb = ereg->get(E_SRCB);
     
     uint64_t cnd = 0;
-    uint64_t vale = ereg->get(E_VALC);
+    uint64_t vale = ALU(icode, ifun, vala, valb, valc);
 
     
 
@@ -109,52 +110,65 @@ uint64_t ExecuteStage::getDstE(uint64_t e_icode, uint64_t e_cnd, uint64_t e_dste
 		return e_dste;
 }
 
-void ExecuteStage::CC(uint64_t num, uint64_t A, uint64_t B) {
+void ExecuteStage::CC(uint64_t e_icode, uint64_t num, uint64_t A, uint64_t B, uint64_t fun) {
 	bool error = false;
+	if (set_cc(e_icode)) {
 	if (num == 0) {
 		cc->setConditionCode(1,ZF,error);
 	}
 	else {
 		 cc->setConditionCode(0,ZF,error);
 	}
-	if (num < 0) {
+	if (Tools::sign(num) == 1) {
 		 cc->setConditionCode(1,SF,error);
 	}
 	else {
 		cc->setConditionCode(0,SF,error);
 	}
-	if (A >= 0 && B >= 0 && num < 0 ) {
-		cc->setConditionCode(1,OF,error);
+
+	//implement overflow, implementation differs based on function, use tools class, no overflow for and/xor
+	//
+	
+	if(fun == ADDQ) {
+		if(Tools::addOverflow(A,B))
+			cc->setConditionCode(1,OF,error);
+		else
+			cc->setConditionCode(0,OF,error);
 	}
-	else if (A < 0 && B < 0 && num > 0) {
-		cc->setConditionCode(1,OF,error);
-	}
+	else if(fun == SUBQ) {
+                if(Tools::subOverflow(A,B))
+                        cc->setConditionCode(1,OF,error);
+                else
+                        cc->setConditionCode(0,OF,error);
+        }
 	else {
 		cc->setConditionCode(0,OF,error);
 	}
-
+	}
 }
 
 uint64_t ExecuteStage::ALU(uint64_t e_icode, uint64_t e_ifun, uint64_t e_valA, uint64_t e_valB, uint64_t e_valC) {
 	uint64_t fun = getAluFun(e_icode, e_ifun);
+	uint64_t A = getAluA(e_icode, e_valA, e_valC);
+	uint64_t B = getAluB(e_icode,e_valB);
 	if (fun == ADDQ) {
-		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) + getAluB(e_icode,e_valB);
-		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+		uint64_t rtn = A + B;
+		CC(e_icode, rtn, A, B, fun);
 		return rtn;		
 	}
 	else if (fun == SUBQ) {
-		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) - getAluB(e_icode,e_valB);
-		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+		uint64_t rtn = A - B;
+		CC(e_icode, rtn, A, B, fun);
                 return rtn;
 	}
 	else if (fun == XORQ) {
-		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) ^ getAluB(e_icode,e_valB);
-		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+		uint64_t rtn = A ^ B;
+		CC(e_icode, rtn, A, B, fun);
                 return rtn;
 	}
 	else if (fun == ANDQ) {
-		uint64_t rtn = getAluA(e_icode, e_valA, e_valC) & getAluB(e_icode,e_valB); 
-		CC(rtn, getAluA(e_icode, e_valA, e_valC), getAluB(e_icode,e_valB));
+		uint64_t rtn = A & B; 
+		CC(e_icode, rtn, A, B, fun);
                 return rtn;	
 	}
 	else 
