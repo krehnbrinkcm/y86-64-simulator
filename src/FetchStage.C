@@ -206,10 +206,9 @@ uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_val
 
 uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegIds, bool needValC) {
 	if (needValC) {
-		f_pc += 8;
-		if (needRegIds) {
-	            f_pc += 1;
-	 	}
+	    f_pc += 8;
+	} if (needRegIds) {
+	    f_pc += 1;
 	} 
 	f_pc += 1;
         return f_pc;	

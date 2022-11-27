@@ -9,6 +9,7 @@
 #include "PipeReg.h"
 #include "E.h"
 #include "M.h"
+#include "W.h"
 #include "Stage.h"
 #include "ExecuteStage.h"
 #include "Status.h"
@@ -31,12 +32,10 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t srca  = ereg->get(E_SRCA);
     uint64_t srcb = ereg->get(E_SRCB);
     
-    uint64_t cnd = 0;
     uint64_t vale = ALU(icode, ifun, vala, valb, valc);
-
-    
-
-
+    uint64_t A = getAluA(icode, vala, valc);
+    uint64_t B = getAluB(icode,valb); 
+    uint64_t cnd = cc->getConditionCode(vale, mem_error); 
     setMInput(mreg, stat, icode, cnd, vale, vala, dste, dstm); 
     return false;
 }
