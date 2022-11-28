@@ -31,13 +31,13 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t srca  = ereg->get(E_SRCA);
     uint64_t srcb = ereg->get(E_SRCB);
     
-    uint64_t vale = ALU(icode, ifun, vala, valb, valc);
+    e_valE = ALU(icode, ifun, vala, valb, valc);
     uint64_t A = getAluA(icode, vala, valc);
     uint64_t B = getAluB(icode,valb); 
-    uint64_t cnd = 0;//cc->getConditionCode(ifun, mem_error); 
-    uint64_t dste =  getDstE(icode, cnd, (ereg->get(E_DSTE)));
+    e_Cnd = 0;//cc->getConditionCode(ifun, mem_error); 
+    e_dstE =  getDstE(icode, e_Cnd, e_dstE);
 
-    setMInput(mreg, stat, icode, cnd, vale, vala, dste, dstm); 
+    setMInput(mreg, stat, icode, e_Cnd, e_valE, vala, e_dstE, dstm); 
     return false;
 }
 

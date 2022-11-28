@@ -37,13 +37,13 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 
 	uint64_t dste = getDstE(icode, rb);
 	uint64_t dstm = getDstM(icode, ra);
-	uint64_t srca = getDsrcA(icode, ra);
-	uint64_t srcb = getDsrcB(icode, rb);
-	uint64_t vala = getSelFwdA(mreg, wreg, srca);
-        uint64_t valb = getFwdB(mreg, wreg, srcb);
+	d_srcA = getDsrcA(icode, ra);
+	d_srcB = getDsrcB(icode, rb);
+	uint64_t vala = getSelFwdA(mreg, wreg, d_srcA);
+        uint64_t valb = getFwdB(mreg, wreg, d_srcB);
 
         
-	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, srca, srcb);	
+	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, d_srcA, d_srcB);	
 	return false;
 } 
 
@@ -94,34 +94,34 @@ uint64_t DecodeStage::getDstM(uint64_t d_icode, uint64_t d_rA)
 }
 
 
-uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcA)
+uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, uint64_t d_srca)
 {
     bool error;
     uint64_t d_rvalA = 0;
     if(d_srcA == e_dstE){
 	return e_valE;
-    } else if (d_srcA == (mreg -> get(M_DSTE))) {
+    } else if (d_srca == (mreg -> get(M_DSTE))) {
 	return mreg -> get(M_VALE);
-    } else if (d_srcA == (wreg -> get(W_DSTE))) { 
+    } else if (d_srca == (wreg -> get(W_DSTE))) { 
 	return wreg -> get(W_VALE);
     } else {
-	d_rvalA = rf->readRegister(d_srcA, error);
+	d_rvalA = rf->readRegister(d_srca, error);
     	return d_rvalA; 
     }
 }
 
-uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcB)
+uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcb)
 {
     bool error;
     uint64_t d_rvalB = 0;
-    if(d_srcB == e_dstE){
+    if(d_srcb == e_dstE){
         return e_valE;
-    } else if (d_srcB == (mreg -> get(M_DSTE))) {
+    } else if (d_srcb == (mreg -> get(M_DSTE))) {
 	return mreg -> get(M_VALE);
-    } else if (d_srcB == (wreg -> get(W_DSTE))) { 
+    } else if (d_srcb == (wreg -> get(W_DSTE))) { 
         return wreg -> get(W_VALE);
     } else {
-        d_rvalB = rf->readRegister(d_srcB, error);
+        d_rvalB = rf->readRegister(d_srcb, error);
         return d_rvalB;
     }
 }
