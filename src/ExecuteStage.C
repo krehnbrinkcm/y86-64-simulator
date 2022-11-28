@@ -134,16 +134,20 @@ void ExecuteStage::CC(uint64_t e_icode, uint64_t num, uint64_t A, uint64_t B, ui
 	//
 	
 	if(fun == ADDQ) {
-		if(Tools::addOverflow(A,B))
+		if(Tools::addOverflow(A,B)) {
 			cc->setConditionCode(1,OF,error);
-		else
+		}
+		else {
 			cc->setConditionCode(0,OF,error);
+		}
 	}
 	else if(fun == SUBQ) {
-                if(Tools::subOverflow(A,B))
+                if(Tools::subOverflow(A,B)) {
                         cc->setConditionCode(1,OF,error);
-                else
+		}
+                else {
                         cc->setConditionCode(0,OF,error);
+		}
         }
 	else {
 		cc->setConditionCode(0,OF,error);

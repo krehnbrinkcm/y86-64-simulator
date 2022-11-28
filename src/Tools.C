@@ -332,11 +332,11 @@ bool Tools::addOverflow(uint64_t op1, uint64_t op2)
 	//      operand and the result.  For example, if you add two positive numbers, 
 	//      the result should be positive, otherwise an overflow occurred
 	uint64_t sum = op1 + op2;
-	if(sign(op1) && sign(op2) && sign(sum))
-		return false;
-	if(!sign(op1) && !sign(op2) && !sign(sum))
-		return false;
-	return true;
+	if(sign(op1) && sign(op2) && !sign(sum))
+		return true;
+	if(!sign(op1) && !sign(op2) && sign(sum))
+		return true;
+	return false;
 }
 
 /**
