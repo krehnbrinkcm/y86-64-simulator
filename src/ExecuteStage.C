@@ -35,7 +35,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t A = getAluA(icode, vala, valc);
     uint64_t B = getAluB(icode,valb); 
     e_Cnd = 0;//cc->getConditionCode(ifun, mem_error); 
-    e_dstE =  getDstE(icode, e_Cnd, e_dstE);
+    e_dstE =  getDstE(icode, e_Cnd, (ereg->get(E_DSTE)));
 
     setMInput(mreg, stat, icode, e_Cnd, e_valE, vala, e_dstE, dstm); 
     return false;
