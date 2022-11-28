@@ -27,7 +27,6 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t valc = ereg->get(E_VALC);
     uint64_t vala = ereg->get(E_VALA);
     uint64_t valb = ereg->get(E_VALB);
-    uint64_t dste = ereg->get(E_DSTE);
     uint64_t dstm = ereg->get(E_DSTM);
     uint64_t srca  = ereg->get(E_SRCA);
     uint64_t srcb = ereg->get(E_SRCB);
@@ -35,7 +34,9 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t vale = ALU(icode, ifun, vala, valb, valc);
     uint64_t A = getAluA(icode, vala, valc);
     uint64_t B = getAluB(icode,valb); 
-    uint64_t cnd = cc->getConditionCode(vale, mem_error); 
+    uint64_t cnd = 0;//cc->getConditionCode(ifun, mem_error); 
+    uint64_t dste =  getDstE(icode, cnd, (ereg->get(E_DSTE)));
+
     setMInput(mreg, stat, icode, cnd, vale, vala, dste, dstm); 
     return false;
 }
@@ -98,11 +99,15 @@ uint64_t ExecuteStage::getAluFun(uint64_t e_icode, uint64_t e_ifun) {
 }
 
 bool ExecuteStage::set_cc(uint64_t e_icode) {
-	return e_icode == IOPQ;
+	if(e_icode == IOPQ)
+	{
+	    return true;
+	}
+	return false;
 }
 
 uint64_t ExecuteStage::getDstE(uint64_t e_icode, uint64_t e_cnd, uint64_t e_dste) {
-	if (e_icode == IRRMOVQ && !e_cnd) {
+	if (e_icode == IRRMOVQ && !(e_cnd)) {
 		return RNONE;
 	}
 	else 

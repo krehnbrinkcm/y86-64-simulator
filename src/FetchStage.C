@@ -59,13 +59,13 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    if(needregId) {
 	getRegIds(mem->getByte((f_pc+1), mem_error), rA, rB);
    }     
-   if(needvalC) {
+   if(needvalC == true) {
        valC = buildValC(f_pc, icode);
    }
  
    //TODO
    //determine the address of the next sequential function
-   valP = PCincrement(f_pc, needvalC, needregId);
+   valP = PCincrement(f_pc, needregId, needvalC);
 
    //TODO
    //calculate the predicted PC value

@@ -69,7 +69,7 @@ uint64_t Memory::getLong(int32_t address, bool & imem_error)
  */
 uint8_t Memory::getByte(int32_t address, bool & imem_error)
 {
-	if (address >= 0 && address < MEMSIZE){
+	if ((address >= 0) && (address < MEMSIZE)){
 		imem_error = false;
 		return mem[address];
 	}
