@@ -165,7 +165,7 @@ uint64_t ExecuteStage::ALU(uint64_t e_icode, uint64_t e_ifun, uint64_t e_valA, u
 		return rtn;		
 	}
 	else if (fun == SUBQ) {
-		uint64_t rtn = A - B;
+		uint64_t rtn = B - A;
 		CC(e_icode, rtn, A, B, fun);
                 return rtn;
 	}
