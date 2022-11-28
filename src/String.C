@@ -150,7 +150,7 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
         }
 	else {
 		int vidx = 0;
-		char * valid = new char[endIdx - startIdx + 1];
+		char * valid = new char[endIdx - startIdx + 2];
 		for (int i = startIdx; i <= endIdx; i++) {
                 	if (!isxdigit(str[i])) {
 				error = true;
@@ -159,6 +159,7 @@ uint32_t String::convert2Hex(int32_t startIdx, int32_t endIdx, bool & error)
 			valid[vidx] = str[i];
 			vidx++;
                 }
+		valid[vidx] = 0;
 		error = false;
 		return strtol(valid, NULL, 16); 
 	}
