@@ -96,6 +96,7 @@ uint64_t DecodeStage::getDstM(uint64_t d_icode, uint64_t d_rA)
 
 uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, uint64_t d_srca)
 {
+	if (d_srca == RNONE) return 0;
     bool error;
     uint64_t d_rvalA = 0;
     if(d_srcA == e_dstE){
@@ -112,6 +113,7 @@ uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, uint64_t d_srca
 
 uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcb)
 {
+	if (d_srcb == RNONE) return 0;
     bool error;
     uint64_t d_rvalB = 0;
     if(d_srcb == e_dstE){

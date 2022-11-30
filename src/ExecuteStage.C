@@ -34,7 +34,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     e_valE = ALU(icode, ifun, vala, valb, valc);
     uint64_t A = getAluA(icode, vala, valc);
     uint64_t B = getAluB(icode,valb); 
-    e_Cnd = 0;//cc->getConditionCode(ifun, mem_error); 
+    e_Cnd = cond(icode, ifun);//cc->getConditionCode(ifun, mem_error); 
     e_dstE =  getDstE(icode, e_Cnd, (ereg->get(E_DSTE)));
 
     setMInput(mreg, stat, icode, e_Cnd, e_valE, vala, e_dstE, dstm); 
@@ -152,6 +152,38 @@ void ExecuteStage::CC(uint64_t e_icode, uint64_t num, uint64_t A, uint64_t B, ui
 	else {
 		cc->setConditionCode(0,OF,error);
 	}
+	}
+}
+
+uint64_t ExecuteStage::cond(uint64_t e_icode, uint64_t e_ifun)
+{
+	bool error = false;
+	cc->getInstance();
+	bool zF = cc->getConditionCode(ZF, error);
+	bool sF = cc->getConditionCode(SF,error);
+	bool oF = cc->getConditionCode(OF, error);
+	if(e_icode != IJXX && e_icode != ICMOVXX) {
+		return 0;
+	}
+	else {
+		if(e_ifun == UNCOND) {
+			return 1;
+		}
+		else if(e_ifun == LESSEQ) {
+			return ((sF ^ oF) | zF);
+		} else if(e_ifun == LESS) {
+			return (sF ^ oF);
+		} else if(e_ifun == EQUAL) {
+			return zF;
+		} else if(e_ifun == NOTEQUAL) {
+			return (!zF);
+		} else if(e_ifun == GREATER) { 
+			return (!(sF ^ oF) & !zF);
+		} else if(e_ifun == GREATEREQ) {
+			return (!(sF ^ oF));
+		} else {
+			return 0;
+		}
 	}
 }
 
