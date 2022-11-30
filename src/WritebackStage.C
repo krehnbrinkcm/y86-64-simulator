@@ -37,6 +37,8 @@ void WritebackStage::doClockHigh(PipeReg ** pregs) {
    //needs to be fixed 
    PipeReg * wreg = pregs[WREG];
    rf->writeRegister(wreg->get(W_VALE), wreg->get(W_DSTE),error);
+   rf->writeRegister(wreg->get(W_VALM), wreg->get(W_DSTM),error);
+   
 
    //rf -> writeRegister(wreg->get(W_DSTE), wreg->get(W_VALM), error); 
 }
