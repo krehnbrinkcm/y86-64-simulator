@@ -39,8 +39,8 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	uint64_t dstm = getDstM(icode, ra);
 	d_srcA = getDsrcA(icode, ra);
 	d_srcB = getDsrcB(icode, rb);
-	uint64_t vala = getSelFwdA(mreg, wreg, d_srcA);
-        uint64_t valb = getFwdB(mreg, wreg, d_srcB);
+	uint64_t vala = getSelFwdA(mreg, wreg, dreg, d_srcA);
+    uint64_t valb = getFwdB(mreg, wreg, d_srcB);
 
         
 	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, d_srcA, d_srcB);	
@@ -94,32 +94,43 @@ uint64_t DecodeStage::getDstM(uint64_t d_icode, uint64_t d_rA)
 }
 
 
-uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, uint64_t d_srca)
+uint64_t DecodeStage::getSelFwdA(PipeReg * mreg, PipeReg * wreg, PipeReg * dreg, uint64_t d_srca)
 {
-	if (d_srca == RNONE) return 0;
+    if(((dreg -> get(D_ICODE)) == ICALL) || ((dreg -> get(D_ICODE)) == IJXX)) {
+        return dreg -> get(D_VALP);
+    }
+    if (d_srca == RNONE) return 0;
     bool error;
-    uint64_t d_rvalA = 0;
-    if(d_srcA == e_dstE){
+    uint64_t d_rvalA = 0;    
+    if(d_srcA == e_dstE) {
 	return e_valE;
+    } else if (d_srca == (mreg -> get(M_DSTM))) {
+	return m_valM;
     } else if (d_srca == (mreg -> get(M_DSTE))) {
 	return mreg -> get(M_VALE);
+    } else if (d_srca == (wreg -> get(W_DSTM))) { 
+	return wreg -> get(W_VALM);
     } else if (d_srca == (wreg -> get(W_DSTE))) { 
 	return wreg -> get(W_VALE);
     } else {
-	d_rvalA = rf->readRegister(d_srca, error);
+		d_rvalA = rf->readRegister(d_srca, error);
     	return d_rvalA; 
     }
 }
 
 uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcb)
 {
-	if (d_srcb == RNONE) return 0;
+    if (d_srcb == RNONE) return 0;
     bool error;
     uint64_t d_rvalB = 0;
-    if(d_srcb == e_dstE){
+    if(d_srcb == e_dstE) {
         return e_valE;
+    } else if (d_srcb == (mreg -> get(M_DSTM))) {
+	return m_valM;
     } else if (d_srcb == (mreg -> get(M_DSTE))) {
 	return mreg -> get(M_VALE);
+    } else if (d_srcb == (wreg -> get(W_DSTM))) { 
+	return wreg -> get(W_VALM);
     } else if (d_srcb == (wreg -> get(W_DSTE))) { 
         return wreg -> get(W_VALE);
     } else {
@@ -127,7 +138,6 @@ uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcb)
         return d_rvalB;
     }
 }
-
 
 void DecodeStage::setEInput(PipeReg * ereg, uint64_t e_stat, uint64_t e_icode, uint64_t e_ifun, uint64_t e_valc, uint64_t e_vala, uint64_t e_valb, uint64_t e_dste, uint64_t e_dstm, uint64_t e_srca, uint64_t e_srcb) {
 	ereg->set(E_STAT, e_stat);

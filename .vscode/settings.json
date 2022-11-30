@@ -2,6 +2,7 @@
     "files.associations": {
         "Loader.C": "cpp",
         "DecodeStage.C": "cpp",
-        "ExecuteStage.C": "cpp"
+        "ExecuteStage.C": "cpp",
+        "MemoryStage.C": "cpp"
     }
 }
