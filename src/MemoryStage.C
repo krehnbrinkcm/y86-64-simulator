@@ -41,6 +41,26 @@ void MemoryStage::doClockHigh(PipeReg ** pregs) {
 	wreg->normal();
 }
 
+uint64_t MemoryStage::Addr(uint64_t M_icode, uint64_t M_valE, uint64_t M_valA) {
+	if (M_icode == IRMMOVQ || M_icode == IPUSHQ || M_icode == ICALL || M_icode == IMRMOVQ) {
+		return M_valE;
+	}
+	else if (M_icode == IPOPQ || M_icode == IRET) {
+		return M_valA;
+	}
+	else {
+		return 0;
+	}
+}
+
+bool MemoryStage::mem_read(uint64_t M_icode) {
+	return (M_icode == IMRMOVQ || M_icode == IPOPQ || M_icode == IRET);
+}
+
+bool MemoryStage::mem_write(uint64_t M_icode) {
+	return (M_icode == IRMMOVQ || M_icode == IPUSHQ || M_icode == ICALL);
+}
+
 
 void MemoryStage::setWInput(PipeReg * wreg, uint64_t w_stat, uint64_t w_icode, uint64_t w_vale, uint64_t w_valm, uint64_t w_dste, uint64_t w_dstm) {
 	wreg->set(W_STAT, w_stat);
