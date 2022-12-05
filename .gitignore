@@ -7,3 +7,4 @@ tst/*.sdump
 tst/*.idump
 bin/iyas
 bin/iyessl8
+bin/iyessl9

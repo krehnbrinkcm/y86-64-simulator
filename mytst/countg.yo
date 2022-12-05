@@ -1,0 +1,80 @@
+                            | #This program counts the number of positive (> 0)
+                            | #numbers in a list. 
+0x000:                      |         .pos 0
+                            | #
+                            | #Initialize %rax to 0
+0x000: 30f00000000000000000 | irmovq 0, %rax
+0x00a: 30f30100000000000000 | irmovq 1, %rbx
+0x014: 30f50000000000000000 | irmovq 0, %rbp
+0x01e: 30f70800000000000000 | irmovq 8, %rdi
+                            | #Get a number out of the list
+0x028: 30f2b000000000000000 | irmovq nums, %rdx
+0x032: 50120000000000000000 | mrmovq (%rdx), %rcx
+0x03c: 10                   | nop
+                            | 
+                            | #Determine if the number is positive (you'll need an opq
+                            | #instruction to set the condition codes)
+0x03d: 6131                 | subq %rbx, %rcx 
+                            | #Add one to %rax if it is positive (you'll need a conditional move)
+                            | #Repeat for each of the five numbers 
+                            | #
+0x03f: 2534                 | cmovge %rbx, %rsp
+0x041: 2254                 | cmovl %rbp, %rsp
+0x043: 6040                 | addq %rsp, %rax
+                            | 
+                            | 
+0x045: 6072                 | addq %rdi, %rdx
+0x047: 50120000000000000000 | mrmovq (%rdx), %rcx
+0x051: 10                   | nop
+0x052: 6131                 | subq %rbx, %rcx
+0x054: 2534                 | cmovge %rbx, %rsp
+0x056: 2254                 | cmovl %rbp, %rsp
+0x058: 6040                 | addq %rsp, %rax
+                            | 
+0x05a: 6072                 | addq %rdi, %rdx
+0x05c: 50120000000000000000 | mrmovq (%rdx), %rcx
+0x066: 10                   | nop
+0x067: 6131                 | subq %rbx, %rcx
+0x069: 2534                 | cmovge %rbx, %rsp
+0x06b: 2254                 | cmovl %rbp, %rsp
+0x06d: 6040                 | addq %rsp, %rax
+                            | 
+0x06f: 6072                 | addq %rdi, %rdx
+0x071: 50120000000000000000 | mrmovq (%rdx), %rcx
+0x07b: 10                   | nop
+0x07c: 6131                 | subq %rbx, %rcx
+0x07e: 2534                 | cmovge %rbx, %rsp
+0x080: 2254                 | cmovl %rbp, %rsp
+0x082: 6040                 | addq %rsp, %rax
+                            | 
+0x084: 6072                 | addq %rdi, %rdx
+0x086: 50120000000000000000 | mrmovq (%rdx), %rcx
+0x090: 10                   | nop
+0x091: 6131                 | subq %rbx, %rcx
+0x093: 2534                 | cmovge %rbx, %rsp
+0x095: 2254                 | cmovl %rbp, %rsp
+0x097: 6040                 | addq %rsp, %rax
+                            | 
+                            | 
+                            | 
+                            | 
+                            | 
+                            | 
+                            | 
+                            | 
+                            | 
+                            | 
+                            | #At the end, %rax should have the count of the number
+                            | #of positive numbers (3 for this data)
+                            | #Store the value of %rax in mem[count]
+0x099: 506fb000000000000000 | mrmovq nums, %rsi
+0x0a3: 400f0000000000000000 | rmmovq %rax, %rsi
+0x0ad: 00                   |         halt
+                            | #Here is the list of numbers
+0x0b0:                      |         .align 8
+0x0b0: 2300000000000000     | nums:   .quad 0x23
+0x0b8: 1300000000000000     |         .quad 0x13
+0x0c0: f8ffffffffffffff     |         .quad 0xfffffffffffffff8
+0x0c8: 0000000000000000     |         .quad 0x0
+0x0d0: 1100000000000000     |         .quad 0x11
+0x0d8: 0000000000000000     | count:  .quad 0
