@@ -19,6 +19,7 @@
 bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     PipeReg * ereg = pregs[EREG];
     PipeReg * mreg = pregs[MREG];
+    PipeReg * wreg = pregs[WREG];
     bool mem_error = false;
     
     uint64_t stat = ereg->get(E_STAT);
@@ -31,7 +32,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     uint64_t srca  = ereg->get(E_SRCA);
     uint64_t srcb = ereg->get(E_SRCB);
     
-    e_valE = ALU(icode, ifun, vala, valb, valc);
+    e_valE = ALU(icode, ifun, vala, valb, valc, wreg);
     uint64_t A = getAluA(icode, vala, valc);
     uint64_t B = getAluB(icode,valb); 
     e_Cnd = cond(icode, ifun);//cc->getConditionCode(ifun, mem_error); 
@@ -98,10 +99,11 @@ uint64_t ExecuteStage::getAluFun(uint64_t e_icode, uint64_t e_ifun) {
 		return ADDQ;
 }
 
-bool ExecuteStage::set_cc(uint64_t e_icode) {
-	if(e_icode == IOPQ)
+bool ExecuteStage::set_cc(uint64_t e_icode, PipeReg * wreg) {
+	if(e_icode == IOPQ && (!(m_stat) == SADR || !(m_stat) == SINS || !(m_stat) == SHLT)
+        && (wreg->get(W_STAT) == SADR || wreg->get(W_STAT) == SINS || wreg->get(W_STAT) == SHLT))
 	{
-	    return true;
+	    		return true;
 	}
 	return false;
 }
@@ -114,9 +116,9 @@ uint64_t ExecuteStage::getDstE(uint64_t e_icode, uint64_t e_cnd, uint64_t e_dste
 		return e_dste;
 }
 
-void ExecuteStage::CC(uint64_t e_icode, uint64_t num, uint64_t A, uint64_t B, uint64_t fun) {
+void ExecuteStage::CC(uint64_t e_icode, uint64_t num, uint64_t A, uint64_t B, uint64_t fun, PipeReg * wreg) {
 	bool error = false;
-	if (set_cc(e_icode)) {
+	if (set_cc(e_icode,wreg)) {
 	if (num == 0) {
 		cc->setConditionCode(1,ZF,error);
 	}
@@ -187,28 +189,28 @@ uint64_t ExecuteStage::cond(uint64_t e_icode, uint64_t e_ifun)
 	}
 }
 
-uint64_t ExecuteStage::ALU(uint64_t e_icode, uint64_t e_ifun, uint64_t e_valA, uint64_t e_valB, uint64_t e_valC) {
+uint64_t ExecuteStage::ALU(uint64_t e_icode, uint64_t e_ifun, uint64_t e_valA, uint64_t e_valB, uint64_t e_valC, PipeReg * wreg) {
 	uint64_t fun = getAluFun(e_icode, e_ifun);
 	uint64_t A = getAluA(e_icode, e_valA, e_valC);
 	uint64_t B = getAluB(e_icode,e_valB);
 	if (fun == ADDQ) {
 		uint64_t rtn = A + B;
-		CC(e_icode, rtn, A, B, fun);
+		CC(e_icode, rtn, A, B, fun, wreg);
 		return rtn;		
 	}
 	else if (fun == SUBQ) {
 		uint64_t rtn = B - A;
-		CC(e_icode, rtn, A, B, fun);
+		CC(e_icode, rtn, A, B, fun, wreg);
                 return rtn;
 	}
 	else if (fun == XORQ) {
 		uint64_t rtn = A ^ B;
-		CC(e_icode, rtn, A, B, fun);
+		CC(e_icode, rtn, A, B, fun, wreg);
                 return rtn;
 	}
 	else if (fun == ANDQ) {
 		uint64_t rtn = A & B; 
-		CC(e_icode, rtn, A, B, fun);
+		CC(e_icode, rtn, A, B, fun, wreg);
                 return rtn;	
 	}
 	else 
