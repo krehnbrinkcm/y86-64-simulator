@@ -4,6 +4,7 @@
         "DecodeStage.C": "cpp",
         "ExecuteStage.C": "cpp",
         "MemoryStage.C": "cpp",
-        "WritebackStage.C": "cpp"
+        "WritebackStage.C": "cpp",
+        "FetchStage.C": "cpp"
     }
 }

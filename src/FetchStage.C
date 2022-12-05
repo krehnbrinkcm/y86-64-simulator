@@ -212,4 +212,27 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegIds, bool needValC) 
 	} 
 	f_pc += 1;
         return f_pc;	
-}     
+}
+
+bool FetchStage::instr_valid(uint64_t  f_icode) {
+    if(f_icode == INOP || f_icode == IHALT || f_icode == IIRMOVQ || f_icode == IRMMOVQ
+      || f_icode == IMRMOVQ  || f_icode == IOPQ  || f_icode == IJXX  || f_icode == ICALL
+      || f_icode == IRET || f_icode == IPUSHQ || f_icode == IPOPQ) {
+          return true; 
+    }
+    return false;
+}   
+
+uint64_t FetchStage::getStat(uint64_t f_icode, bool mem_error) {
+    if(mem_error) {
+        return SADR;
+    }
+    bool ins = instr_valid(f_icode);
+    if(!(ins)) {
+        return SINS;
+    }
+    if(f_icode == IHALT) {
+        return SHLT;
+    }
+    return SAOK;
+}
