@@ -29,18 +29,18 @@ bool MemoryStage::doClockLow(PipeReg ** pregs) {
 	uint64_t vala = mreg->get(M_VALA);
 	uint64_t dste = mreg->get(M_DSTE);
 	uint64_t dstm = mreg->get(M_DSTM);
-	uint64_t valm = 0;
+	
 
 	uint64_t addr = Addr(icode, vale, vala);
 
 	if(mem_read(icode)) {
-		valm = mem->getLong(addr, mem_error);
+		m_valM = mem->getLong(addr, mem_error);
 	}
 	if(mem_write(icode)) {
 		mem->putLong(vala, addr, mem_error);
 	} 
 
-	setWInput(wreg, stat, icode, vale, valm, dste, dstm);
+	setWInput(wreg, stat, icode, vale, m_valM, dste, dstm);
         return false;
 }
 

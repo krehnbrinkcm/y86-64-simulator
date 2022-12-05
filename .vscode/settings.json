@@ -3,6 +3,7 @@
         "Loader.C": "cpp",
         "DecodeStage.C": "cpp",
         "ExecuteStage.C": "cpp",
-        "MemoryStage.C": "cpp"
+        "MemoryStage.C": "cpp",
+        "WritebackStage.C": "cpp"
     }
 }
