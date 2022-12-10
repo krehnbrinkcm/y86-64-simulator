@@ -16,13 +16,14 @@
 #include "Debug.h"
 #include "Tools.h"
 
+
 bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     PipeReg * ereg = pregs[EREG];
     PipeReg * mreg = pregs[MREG];
     PipeReg * wreg = pregs[WREG];
     bool mem_error = false;
     
-	bool M_bubble = calculateControlSignals(wreg);
+    bool M_bubble = calculateControlSignals(wreg);
     uint64_t stat = ereg->get(E_STAT);
     uint64_t icode = ereg->get(E_ICODE);
     uint64_t ifun = ereg->get(E_IFUN);
@@ -45,9 +46,12 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
 
 void ExecuteStage::doClockHigh(PipeReg ** pregs) {
     PipeReg * mreg = pregs[MREG];
-	((M *)mreg)->bubble();
-	
-    mreg->normal();
+	if (M_bubble == false) {
+		mreg->normal();
+	}
+	else {
+		((M *)mreg)->bubble();
+	}
 }
 
 /*
