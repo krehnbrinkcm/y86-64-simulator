@@ -40,6 +40,14 @@ bool MemoryStage::doClockLow(PipeReg ** pregs) {
 		mem->putLong(vala, addr, mem_error);
 	} 
 	stat = getStat(stat, mem_error);
+	
+	if(mem_error == true) {
+		m_stat = SADR;
+	}
+	else {
+		m_stat = stat;
+	}
+	
 	setWInput(wreg, stat, icode, vale, m_valM, dste, dstm);
         return false;
 }
