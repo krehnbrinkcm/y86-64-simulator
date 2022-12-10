@@ -1,6 +1,7 @@
 class ExecuteStage: public Stage
 {
 private:
+     bool M_bubble;
      uint64_t getAluA(uint64_t e_icode,uint64_t e_valA,uint64_t e_valC); 
      uint64_t getAluB(uint64_t e_icode,uint64_t e_valB);
      uint64_t getAluFun(uint64_t e_icode, uint64_t e_ifun);

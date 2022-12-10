@@ -23,7 +23,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     PipeReg * wreg = pregs[WREG];
     bool mem_error = false;
     
-    bool M_bubble = calculateControlSignals(wreg);
+    M_bubble = calculateControlSignals(wreg);
     uint64_t stat = ereg->get(E_STAT);
     uint64_t icode = ereg->get(E_ICODE);
     uint64_t ifun = ereg->get(E_IFUN);
