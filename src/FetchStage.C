@@ -71,9 +71,9 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    //calculate the predicted PC value
    predPC = predictPC(icode, valC, valP);
 
-   stat = getStat(icode, mem_error);
    icode = getIcode(icode, mem_error);
    ifun = getIfun(ifun, mem_error);
+   stat = getStat(icode, mem_error);
 
    //set the input for the PREDPC pipe register field in the F register
    freg->set(F_PREDPC, predPC);
@@ -222,9 +222,9 @@ bool FetchStage::instr_valid(uint64_t  f_icode) {
     if(f_icode == INOP || f_icode == IHALT || f_icode == IIRMOVQ || f_icode == IRMMOVQ
       || f_icode == IMRMOVQ  || f_icode == IOPQ  || f_icode == IJXX  || f_icode == ICALL
       || f_icode == IRET || f_icode == IPUSHQ || f_icode == IPOPQ) {
-          return 1; 
+          return true; 
     }
-    return 0;
+    return false;
 }
 
 uint64_t FetchStage::getStat(uint64_t icode, bool mem_error) {
