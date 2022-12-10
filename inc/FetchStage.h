@@ -15,8 +15,10 @@ class FetchStage: public Stage
       void setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode, 
                      uint64_t ifun, uint64_t rA, uint64_t rB,
                      uint64_t valC, uint64_t valP);
-      bool instr_valid(uint64_t  f_icode);
-      uint64_t getStat(uint64_t f_icode, bool mem_error);
+      bool instr_valid(uint64_t icode);
+      uint64_t getStat(uint64_t icode, bool mem_error);
+      uint64_t getIcode(uint64_t icode, bool mem_error);
+      uint64_t getIfun(uint64_t ifun, bool mem_error);
    public:
       //These are the only methods that are called outside of the class
       bool doClockLow(PipeReg ** pregs);  

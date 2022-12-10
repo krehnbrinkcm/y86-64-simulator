@@ -39,7 +39,7 @@ bool MemoryStage::doClockLow(PipeReg ** pregs) {
 	if(mem_write(icode)) {
 		mem->putLong(vala, addr, mem_error);
 	} 
-
+	stat = getStat(stat, mem_error);
 	setWInput(wreg, stat, icode, vale, m_valM, dste, dstm);
         return false;
 }
@@ -69,6 +69,13 @@ bool MemoryStage::mem_write(uint64_t M_icode) {
 	return (M_icode == IRMMOVQ || M_icode == IPUSHQ || M_icode == ICALL);
 }
 
+uint64_t MemoryStage::getStat(uint64_t stat, bool mem_error) {
+    if(mem_error)
+    {
+	return SADR;
+    }
+    return stat;
+}
 
 void MemoryStage::setWInput(PipeReg * wreg, uint64_t w_stat, uint64_t w_icode, uint64_t w_vale, uint64_t w_valm, uint64_t w_dste, uint64_t w_dstm) {
 	wreg->set(W_STAT, w_stat);
