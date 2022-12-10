@@ -22,6 +22,7 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
     PipeReg * wreg = pregs[WREG];
     bool mem_error = false;
     
+	bool M_bubble = calculateControlSignals(wreg);
     uint64_t stat = ereg->get(E_STAT);
     uint64_t icode = ereg->get(E_ICODE);
     uint64_t ifun = ereg->get(E_IFUN);
@@ -44,6 +45,8 @@ bool ExecuteStage::doClockLow(PipeReg ** pregs) {
 
 void ExecuteStage::doClockHigh(PipeReg ** pregs) {
     PipeReg * mreg = pregs[MREG];
+	((M *)mreg)->bubble();
+	
     mreg->normal();
 }
 
@@ -215,6 +218,17 @@ uint64_t ExecuteStage::ALU(uint64_t e_icode, uint64_t e_ifun, uint64_t e_valA, u
 	}
 	else 
 		return 0;
+}
+
+bool ExecuteStage::calculateControlSignals(PipeReg * wreg) {
+	if (m_stat == SADR || m_stat == SINS || m_stat == SHLT) {
+		return true;
+	}
+	uint64_t stat = wreg->get(W_STAT);
+	if (stat == SADR || stat == SINS || stat == SHLT) {
+		return true;
+	}
+	return false;
 }
 
 

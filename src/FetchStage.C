@@ -222,10 +222,10 @@ bool FetchStage::instr_valid(uint64_t  f_icode) {
     if(f_icode == INOP || f_icode == IHALT || f_icode == IIRMOVQ || f_icode == IRMMOVQ
       || f_icode == IMRMOVQ  || f_icode == IOPQ  || f_icode == IJXX  || f_icode == ICALL
       || f_icode == IRET || f_icode == IPUSHQ || f_icode == IPOPQ) {
-          return true; 
+          return 1; 
     }
-    return false;
-}   
+    return 0;
+}
 
 uint64_t FetchStage::getStat(uint64_t icode, bool mem_error) {
     if(mem_error) {
