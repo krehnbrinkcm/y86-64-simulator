@@ -41,7 +41,7 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	d_srcB = getDsrcB(icode, rb);
 	uint64_t vala = getSelFwdA(mreg, wreg, dreg, d_srcA, valp, icode);
     uint64_t valb = getFwdB(mreg, wreg, d_srcB);
-	E_bubble = calculateControlSignals(icode, dstm);
+	E_bubble = calculateControlSignals(ereg);
 
         
 	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, d_srcA, d_srcB);	
@@ -145,7 +145,9 @@ uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcb)
     }
 }
 
-bool DecodeStage::calculateControlSignals(uint64_t e_icode, uint64_t E_dstM) {
+bool DecodeStage::calculateControlSignals(PipeReg * ereg) {
+	uint64_t e_icode = ereg->get(E_ICODE);
+	uint64_t E_dstM = ereg->get(E_DSTM);
 	if (e_icode == IMRMOVQ || e_icode == IPOPQ) {
 		if (E_dstM == d_srcA || E_dstM == d_srcB) {
 			return true;

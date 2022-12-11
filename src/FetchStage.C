@@ -95,10 +95,10 @@ void FetchStage::doClockHigh(PipeReg ** pregs) {
    PipeReg * freg = pregs[FREG];  //pointer to 
    PipeReg * dreg = pregs[DREG];
 
-   if(F_stall != true) {
+   if(F_stall == false) {
 	freg->normal();	
    }
-   if(D_stall != true) {
+   if(D_stall == false) {
 	dreg->normal();
    }
 }
