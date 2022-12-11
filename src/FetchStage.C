@@ -78,6 +78,8 @@ bool FetchStage::doClockLow(PipeReg ** pregs) {
    //set the input for the PREDPC pipe register field in the F register
    freg->set(F_PREDPC, predPC);
 
+   F_stall = false;
+   D_stall = false;
    calculateControlSignals(ereg);
    //set the inputs for the D register
    setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
@@ -258,22 +260,22 @@ bool FetchStage::f_stall(PipeReg * ereg) {
     uint64_t e_dstM = ereg->get(E_DSTM);
     if(e_icode == IMRMOVQ || e_icode == IPOPQ) {
 	if(e_dstM == d_srcA || e_dstM == d_srcB) {
-		return true;
+	    return true;
 	}
     }
     return false;
 }
 
 bool FetchStage::d_stall(PipeReg * ereg) {
-    uint64_t e_icode = ereg->get(E_ICODE);   
+    uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
     if(e_icode == IMRMOVQ || e_icode == IPOPQ) {
-	if(e_dstM == d_srcA || e_dstM == d_srcB) {
-        	return true;
-	}
+        if(e_dstM == d_srcA || e_dstM == d_srcB) {
+            return true;
+        }
     }
     return false;
-}
+}    
 
 void FetchStage::calculateControlSignals(PipeReg * ereg) {
 	F_stall = f_stall(ereg);

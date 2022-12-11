@@ -41,8 +41,8 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 	d_srcB = getDsrcB(icode, rb);
 	uint64_t vala = getSelFwdA(mreg, wreg, dreg, d_srcA, valp, icode);
     uint64_t valb = getFwdB(mreg, wreg, d_srcB);
+	E_bubble = false;
 	E_bubble = calculateControlSignals(ereg);
-
         
 	setEInput(ereg, stat, icode, ifun, valc, vala, valb, dste, dstm, d_srcA, d_srcB);	
 	return false;
@@ -146,14 +146,12 @@ uint64_t DecodeStage::getFwdB(PipeReg * mreg, PipeReg * wreg, uint64_t d_srcb)
 }
 
 bool DecodeStage::calculateControlSignals(PipeReg * ereg) {
-	uint64_t e_icode = ereg->get(E_ICODE);
-	uint64_t E_dstM = ereg->get(E_DSTM);
-	if (e_icode == IMRMOVQ || e_icode == IPOPQ) {
-		if (E_dstM == d_srcA || E_dstM == d_srcB) {
-			return true;
-		}
-	}
-	return false;
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_dstM = ereg->get(E_DSTM); 
+    if(((e_icode == IJXX) && (!(e_Cnd))) || ((e_icode == IMRMOVQ || e_icode == IPOPQ) && (e_dstM == d_srcA || e_dstM == d_srcB))) {
+	return true;
+    }
+    return false;
 }
 
 void DecodeStage::setEInput(PipeReg * ereg, uint64_t e_stat, uint64_t e_icode, uint64_t e_ifun, uint64_t e_valc, uint64_t e_vala, uint64_t e_valb, uint64_t e_dste, uint64_t e_dstm, uint64_t e_srca, uint64_t e_srcb) {
