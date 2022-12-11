@@ -1,7 +1,9 @@
 class DecodeStage: public Stage
 {
 
-private: 
+private:
+      bool E_bubble;
+      bool calculateControlSignals(uint64_t e_icode, uint64_t E_dstM);
       uint64_t getDsrcA(uint64_t d_icode, uint64_t d_rA);
       uint64_t getDsrcB(uint64_t d_icode, uint64_t d_rB);
       uint64_t getDstE(uint64_t d_icode, uint64_t d_rB);
