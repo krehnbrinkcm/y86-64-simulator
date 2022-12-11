@@ -107,12 +107,19 @@ uint64_t ExecuteStage::getAluFun(uint64_t e_icode, uint64_t e_ifun) {
 }
 
 bool ExecuteStage::set_cc(uint64_t e_icode, PipeReg * wreg) {
-	if(e_icode == IOPQ && (!(m_stat) == SADR || !(m_stat) == SINS || !(m_stat) == SHLT)
-        && (wreg->get(W_STAT) == SADR || wreg->get(W_STAT) == SINS || wreg->get(W_STAT) == SHLT))
-	{
-	    		return true;
+
+	bool mstat = !(m_stat);
+	bool wstat = !(wreg->get(W_STAT));
+
+	if(e_icode == IOPQ) {
+		if (mstat == SADR || mstat == SINS || mstat == SHLT) {
+			if (wstat == SADR || wstat == SINS || wstat == SHLT) {
+				return true;
+			}
+		}
 	}
 	return false;
+
 }
 
 uint64_t ExecuteStage::getDstE(uint64_t e_icode, uint64_t e_cnd, uint64_t e_dste) {
