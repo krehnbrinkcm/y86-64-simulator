@@ -27,8 +27,7 @@
  *
  * @param: pregs - array of the pipeline register (F, D, E, M, W instances)
  */
-bool FetchStage::doClockLow(PipeReg ** pregs)
-{
+bool FetchStage::doClockLow(PipeReg ** pregs) {
    PipeReg * freg = pregs[FREG];  //pointer to object representing F pipeline register
    PipeReg * dreg = pregs[DREG];  //pointer to object representing D pipeline register
    PipeReg * mreg = pregs[MREG];
@@ -46,8 +45,7 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    uint64_t f_pc = selectPC(freg, mreg, wreg);
    uint64_t byte = mem->getByte(f_pc, mem_error);
    icode = Tools::getBits(byte, 4, 7);
-   ifun = Tools::getBits(byte, 0, 3);
-//getByte	
+   ifun = Tools::getBits(byte, 0, 3); //getByte	
    //status of this instruction is SAOK (this will change in a later lab)
    stat = SAOK;
 
@@ -93,12 +91,16 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
  * 
  * @param: pregs - array of the pipeline register (F, D, E, M, W instances)
 */
-void FetchStage::doClockHigh(PipeReg ** pregs)
-{
+void FetchStage::doClockHigh(PipeReg ** pregs) {
    PipeReg * freg = pregs[FREG];  //pointer to 
    PipeReg * dreg = pregs[DREG];
-   freg->normal();
-   dreg->normal();
+
+   if(F_stall != true) {
+	freg->normal();	
+   }
+   if(D_stall != true) {
+	dreg->normal();
+   }
 }
 
 /* setDInput
@@ -116,8 +118,7 @@ void FetchStage::doClockHigh(PipeReg ** pregs)
 */
 void FetchStage::setDInput(PipeReg * dreg, uint64_t stat, uint64_t icode, 
                            uint64_t ifun, uint64_t rA, uint64_t rB,
-                           uint64_t valC, uint64_t valP)
-{
+                           uint64_t valC, uint64_t valP) {
    dreg->set(D_STAT, stat);
    dreg->set(D_ICODE, icode);
    dreg->set(D_IFUN, ifun);
@@ -166,24 +167,20 @@ uint64_t FetchStage::selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg) {
 	}
 }
 
-bool FetchStage::needRegIds(uint64_t f_icode)
-{
-	
+bool FetchStage::needRegIds(uint64_t f_icode) {
      if(f_icode == IRRMOVQ || f_icode == IOPQ || f_icode == IPUSHQ || f_icode == IPOPQ || f_icode == IIRMOVQ || f_icode == IRMMOVQ || f_icode == IMRMOVQ) {
 	return true;
      }
      return false;
 }
 
-void FetchStage::getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB)
-{
+void FetchStage::getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB) {
     rA = Tools::getBits(byte, 4, 7);
     rB = Tools::getBits(byte, 0, 3);			
 } 
 
-bool FetchStage::needValC(uint64_t f_icode)
-{
-    if(f_icode == IIRMOVQ || f_icode == IRMMOVQ || f_icode == IMRMOVQ || f_icode == IJXX || f_icode == ICALL){
+bool FetchStage::needValC(uint64_t f_icode) {
+    if(f_icode == IIRMOVQ || f_icode == IRMMOVQ || f_icode == IMRMOVQ || f_icode == IJXX || f_icode == ICALL) {
 	return true;
     }
     return false;
@@ -193,32 +190,30 @@ uint64_t FetchStage::buildValC(int64_t f_pc, uint64_t icode) {
     uint8_t byte[LONGSIZE];
     bool error;
     f_pc++;
-    if (needRegIds(icode))
-    {
+    if (needRegIds(icode)) {
         f_pc++;
     }
-    for(int i = 0; i < 8; i++)
-    {
+    for(int i = 0; i < 8; i++) {
         byte[i] = mem -> getByte(f_pc + i, error);
     }
     return Tools::buildLong(byte);
 }
 
 uint64_t FetchStage::predictPC(uint64_t f_icode, uint64_t f_valc, uint64_t f_valp) {
-	if (f_icode == IJXX || f_icode == ICALL) {
-		return f_valc;
-	}
-	return f_valp;
+    if (f_icode == IJXX || f_icode == ICALL) {
+	return f_valc;
+    }
+    return f_valp;
 }
 
 uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegIds, bool needValC) {
-	if (needValC) {
-	    f_pc += 8;
-	} if (needRegIds) {
-	    f_pc += 1;
-	} 
+    if (needValC) {
+	f_pc += 8;
+    } if (needRegIds) {
 	f_pc += 1;
-        return f_pc;	
+    } 
+    f_pc += 1;
+    return f_pc;	
 }
 
 bool FetchStage::instr_valid(uint64_t  f_icode) {
@@ -258,8 +253,7 @@ uint64_t FetchStage::getIfun(uint64_t ifun, bool mem_error) {
     return ifun;
 }
 
-bool FetchStage::f_stall(PipeReg * ereg)
-{
+bool FetchStage::f_stall(PipeReg * ereg) {
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
     if((e_icode == IMRMOVQ || e_icode == IPOPQ) &&  (e_dstM == d_srcA || e_dstM == d_srcB)) {
@@ -268,8 +262,7 @@ bool FetchStage::f_stall(PipeReg * ereg)
     return false;
 }
 
-bool FetchStage::d_stall(PipeReg * ereg)
-{
+bool FetchStage::d_stall(PipeReg * ereg) {
     uint64_t e_icode = ereg->get(E_ICODE);   
     uint64_t e_dstM = ereg->get(E_DSTM);
     if((e_icode == IMRMOVQ || e_icode == IPOPQ) &&  (e_dstM == d_srcA || e_dstM == d_srcB)) {
