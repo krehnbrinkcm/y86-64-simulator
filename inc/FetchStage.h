@@ -5,12 +5,12 @@ class FetchStage: public Stage
    private:
       //TODO: provide declarations for new methods
         bool D_bubble;
-	bool d_bubble(PipeReg * ereg);
-	bool f_stall(PipeReg * ereg);
+	bool d_bubble(PipeReg * dreg, PipeReg * ereg, PipeReg * mreg);
+	bool f_stall(PipeReg * dreg, PipeReg * ereg, PipeReg * mreg);
 	bool d_stall(PipeReg * ereg);
 	bool F_stall;
 	bool D_stall;
-	void calculateControlSignals(PipeReg * ereg);
+	void calculateControlSignals(PipeReg * dreg, PipeReg * ereg, PipeReg * mreg);
 	uint64_t selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg);
 	bool needRegIds(uint64_t f_icode);
 	void getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB);
