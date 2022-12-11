@@ -110,7 +110,7 @@ bool ExecuteStage::set_cc(uint64_t e_icode, PipeReg * wreg) {
 	uint64_t wstat = wreg->get(W_STAT);
 
 	if(e_icode == IOPQ) {
-		if (m_stat != SADR || m_stat != SINS || m_stat != SHLT) {
+		if (m_stat != SADR && m_stat != SINS && m_stat != SHLT) {
 			if (wstat != SADR || wstat != SINS || wstat != SHLT) {
 				return true;
 			}
