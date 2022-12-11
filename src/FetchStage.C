@@ -100,8 +100,12 @@ void FetchStage::doClockHigh(PipeReg ** pregs) {
    if(F_stall != true) {
 	freg->normal();	
    }
+   
    if(D_stall != true) {
 	dreg->normal();
+   }
+   if (D_bubble) {
+	((D *)dreg)->bubble();
    }
 }
 
@@ -277,8 +281,14 @@ bool FetchStage::d_stall(PipeReg * ereg) {
     return false;
 }    
 
+bool FetchStage::d_bubble(PipeReg * ereg) {
+	uint64_t e_icode = ereg->get(E_ICODE);;
+	return (e_icode == IJXX && !(e_Cnd));
+}
+
 void FetchStage::calculateControlSignals(PipeReg * ereg) {
 	F_stall = f_stall(ereg);
 	D_stall = d_stall(ereg);
+	D_bubble = d_bubble(ereg);
 }
 

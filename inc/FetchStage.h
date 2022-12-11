@@ -4,6 +4,8 @@ class FetchStage: public Stage
 {
    private:
       //TODO: provide declarations for new methods
+        bool D_bubble;
+	bool d_bubble(PipeReg * ereg);
 	bool f_stall(PipeReg * ereg);
 	bool d_stall(PipeReg * ereg);
 	bool F_stall;
