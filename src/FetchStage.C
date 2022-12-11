@@ -10,6 +10,7 @@
 #include "PipeRegField.h"
 #include "PipeReg.h"
 #include "F.h"
+#include "E.h"
 #include "D.h"
 #include "M.h"
 #include "W.h"
@@ -32,6 +33,7 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    PipeReg * dreg = pregs[DREG];  //pointer to object representing D pipeline register
    PipeReg * mreg = pregs[MREG];
    PipeReg * wreg = pregs[WREG];
+   PipeReg * ereg = pregs[EREG];
    bool mem_error = false;
    uint64_t icode = INOP, ifun = FNONE, rA = RNONE, rB = RNONE;
    uint64_t valC = 0, valP = 0, stat = 0, predPC = 0;
@@ -78,6 +80,7 @@ bool FetchStage::doClockLow(PipeReg ** pregs)
    //set the input for the PREDPC pipe register field in the F register
    freg->set(F_PREDPC, predPC);
 
+   calculateControlSignals(ereg);
    //set the inputs for the D register
    setDInput(dreg, stat, icode, ifun, rA, rB, valC, valP);
    return false;
@@ -255,5 +258,28 @@ uint64_t FetchStage::getIfun(uint64_t ifun, bool mem_error) {
     return ifun;
 }
 
+bool FetchStage::f_stall(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);
+    uint64_t e_dstM = ereg->get(E_DSTM);
+    if((e_icode == IMRMOVQ || e_icode == IPOPQ) &&  (e_dstM == d_srcA || e_dstM == d_srcB)) {
+	return true;
+    }
+    return false;
+}
 
+bool FetchStage::d_stall(PipeReg * ereg)
+{
+    uint64_t e_icode = ereg->get(E_ICODE);   
+    uint64_t e_dstM = ereg->get(E_DSTM);
+    if((e_icode == IMRMOVQ || e_icode == IPOPQ) &&  (e_dstM == d_srcA || e_dstM == d_srcB)) {
+        return true;
+    }
+    return false;
+}
+
+void FetchStage::calculateControlSignals(PipeReg * ereg) {
+	F_stall = f_stall(ereg);
+	D_stall = d_stall(ereg);
+}
 

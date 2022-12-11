@@ -4,6 +4,11 @@ class FetchStage: public Stage
 {
    private:
       //TODO: provide declarations for new methods
+	bool f_stall(PipeReg * ereg);
+	bool d_stall(PipeReg * ereg);
+	bool F_stall;
+	bool D_stall;
+	void calculateControlSignals(PipeReg * ereg);
 	uint64_t selectPC(PipeReg * freg, PipeReg * mreg, PipeReg * wreg);
 	bool needRegIds(uint64_t f_icode);
 	void getRegIds(uint64_t byte, uint64_t &rA, uint64_t &rB);
