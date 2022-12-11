@@ -1,0 +1,25 @@
+
+irmovq %rdi, %r8
+call findMin
+irmovq %rax, %r9
+ret
+
+min:
+    irmovq %rdi, %r10
+
+    irmovq (%r10), %r11
+
+    loop:
+	pushq 8(%r10)
+	subq  0, 8(%r10)
+	popq  8(%r10)
+        je end
+
+        irmovq 8(%r10), %r10
+        irmovq (%r10), %r11
+
+        jmp loop
+    end:
+        irmovq %r11, %rax
+        ret
+
