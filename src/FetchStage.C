@@ -219,7 +219,7 @@ uint64_t FetchStage::PCincrement(uint64_t f_pc, bool needRegIds, bool needValC) 
 }
 
 bool FetchStage::instr_valid(uint64_t  f_icode) {
-    if(f_icode == INOP || f_icode == IHALT || f_icode == IIRMOVQ || f_icode == IRMMOVQ
+    if(f_icode == INOP || f_icode == IHALT || f_icode == IIRMOVQ || f_icode == IRRMOVQ || f_icode == IRMMOVQ
       || f_icode == IMRMOVQ  || f_icode == IOPQ  || f_icode == IJXX  || f_icode == ICALL
       || f_icode == IRET || f_icode == IPUSHQ || f_icode == IPOPQ) {
           return true; 
