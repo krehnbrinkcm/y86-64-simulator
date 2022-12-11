@@ -51,7 +51,7 @@ bool DecodeStage::doClockLow(PipeReg ** pregs) {
 void DecodeStage::doClockHigh(PipeReg ** pregs) {
 	PipeReg * ereg = pregs[EREG];
 	if (E_bubble) {
-		((M *)ereg)->bubble();
+		((E *)ereg)->bubble();
 	}
 	else {
 		ereg->normal();
