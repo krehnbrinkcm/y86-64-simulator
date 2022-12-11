@@ -256,8 +256,10 @@ uint64_t FetchStage::getIfun(uint64_t ifun, bool mem_error) {
 bool FetchStage::f_stall(PipeReg * ereg) {
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
-    if((e_icode == IMRMOVQ || e_icode == IPOPQ) &&  (e_dstM == d_srcA || e_dstM == d_srcB)) {
-	return true;
+    if(e_icode == IMRMOVQ || e_icode == IPOPQ) {
+	if(e_dstM == d_srcA || e_dstM == d_srcB) {
+		return true;
+	}
     }
     return false;
 }
@@ -265,8 +267,10 @@ bool FetchStage::f_stall(PipeReg * ereg) {
 bool FetchStage::d_stall(PipeReg * ereg) {
     uint64_t e_icode = ereg->get(E_ICODE);   
     uint64_t e_dstM = ereg->get(E_DSTM);
-    if((e_icode == IMRMOVQ || e_icode == IPOPQ) &&  (e_dstM == d_srcA || e_dstM == d_srcB)) {
-        return true;
+    if(e_icode == IMRMOVQ || e_icode == IPOPQ) {
+	if(e_dstM == d_srcA || e_dstM == d_srcB) {
+        	return true;
+	}
     }
     return false;
 }
