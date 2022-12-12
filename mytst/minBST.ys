@@ -1,4 +1,3 @@
-
 irmovq %rdi, %r8
 call findMin
 irmovq %rax, %r9
