@@ -5,6 +5,9 @@
         "ExecuteStage.C": "cpp",
         "MemoryStage.C": "cpp",
         "WritebackStage.C": "cpp",
-        "FetchStage.C": "cpp"
+        "FetchStage.C": "cpp",
+        "Tools.C": "cpp",
+        "String.C": "cpp",
+        "ConditionCodes.C": "cpp"
     }
 }
