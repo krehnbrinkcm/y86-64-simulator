@@ -289,7 +289,8 @@ bool FetchStage::d_bubble(PipeReg * dreg, PipeReg * ereg, PipeReg * mreg) {
     uint64_t e_icode = ereg->get(E_ICODE);
     uint64_t e_dstM = ereg->get(E_DSTM);
     uint64_t m_icode = mreg->get(M_ICODE);
-    if (((e_icode == IJXX) && (!(e_Cnd))) || (((e_icode != IMRMOVQ || e_icode != IPOPQ) && (e_dstM == d_srcA || e_dstM == d_srcB)) && (IRET == d_icode || IRET == e_icode || IRET == m_icode))) {		return true;
+    if((e_icode == IJXX && !e_Cnd) || (!((e_icode == IMRMOVQ || e_icode == IPOPQ) && (e_dstM == d_srcA || e_dstM == d_srcB))) && (IRET == d_icode || IRET == e_icode || IRET == m_icode)){
+	return true;
     }
     return false;
 }
