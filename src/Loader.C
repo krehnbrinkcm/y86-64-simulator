@@ -27,8 +27,7 @@
  * Loader
  * Initializes the private data members
  */
-Loader::Loader(int argc, char * argv[], Memory * mem)
-{
+Loader::Loader(int argc, char * argv[], Memory * mem) {
    //this method is COMPLETE
    this->lastAddress = -1;   //keep track of last mem byte written to for error checking
    this->mem = mem;          //memory instance
@@ -45,25 +44,21 @@ Loader::Loader(int argc, char * argv[], Memory * mem)
  * lineNumber - number of line in input file on which error occurred (if applicable)
  * line - line on which error occurred (if applicable)
  */
-bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line)
-{
+bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line) {
    //this method is COMPLETE
-   static char * errMsg[NUMERRS] = 
-   {
+   static char * errMsg[NUMERRS] = {
       (char *) "Usage: yess <file.yo>\n",                       //USAGE
       (char *) "Input file name must end with .yo extension\n", //BADFILE
       (char *) "File open failed\n",                            //OPENERR
       (char *) "Badly formed data record\n",                    //BADDATA
       (char *) "Badly formed comment record\n",                 //BADCOM
    };   
-   if (which >= NUMERRS)
-   {
+   if (which >= NUMERRS) {
       std::cout << "Unknown error: " << which << "\n";
-   } else
-   {
+   } 
+   else {
       std::cout << errMsg[which]; 
-      if (lineNumber != -1 && line != NULL)
-      {
+      if (lineNumber != -1 && line != NULL) {
          std::cout << "Error on line " << std::dec << lineNumber
               << ": " << line->get_stdstr() << std::endl;
       }
@@ -81,8 +76,7 @@ bool Loader::printErrMsg(int32_t which, int32_t lineNumber, String * line)
  *
  * modifies inf data member (file handle) if file is opened
  */
-bool Loader::openFile()
-{
+bool Loader::openFile() {
    //TODO
    //If the user didn't supply a command line argument (inputFile is NULL)
    //then print the USAGE error message and return false
@@ -206,8 +200,7 @@ bool Loader::hasData(String line)
 
 bool Loader::hasComm(String line)
 {
-    bool boo; 
-    
+    bool boo;    
     if(line.isSpaces(0,COMMENT-1,boo)) {
 	if(line.isChar('|',COMMENT, boo)) {
 	    return true;
